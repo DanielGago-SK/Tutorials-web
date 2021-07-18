@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="sk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>grid - zoznám sa s mriežkou pri tvorbe webu </title>
+    <meta name="description"
+        content="Grid - ukážka základného spôsobu fungovania a využitia grid (mriežky) pri tvorbe webového obsahu.">
+    <meta name="keywords" content="HTML,CSS, grid">
+    <meta name="author" content="Daniel Gago">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-size: 1.063rem;
+        }
+
+        .width {
+            /*  šírka celého projektu*/
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 3% 3%;
+            font-family: Arial, Helvetica, sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        :root {
+            --color: rgb(1, 87, 145);
+            /* hlavný motív */
+            --bg_color: rgba(1, 87, 145, 0.5);
+            --item_color1: rgba(1, 87, 145, 0.5);
+            --item_color2: rgba(172, 255, 47, 0.5);
+            --item_color3: rgba(255, 172, 47, 0.5);
+            --space_color: gray;
+            --gray_color: rgb(226, 226, 226);
+        }
+
+        h2,
+        h3 {
+            /* nadpisy - serif písmo */
+            font-family: "Times New Roman", Times, serif;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        h2 {
+            /* hlavný nadpis */
+            padding-top: 1rem;
+            padding-bottom: 2rem;
+        }
+
+        h3 {
+            padding-bottom: 1rem;
+        }
+
+        .line {
+            /* oddeľovacia čiara */
+            border-bottom: 1px solid #272727;
+            margin: 1.5rem 0;
+            height: 1px;
+        }
+
+        .text {
+            /* bloky textu */
+            padding: 0 0 15px 0;
+            line-height: 1.5;
+            max-width: 70ch;
+            color: rgb(48, 48, 48);
+        }
+
+        a {
+            /* všetky odkazy vo farbe */
+            color: var(--color);
+        }
+
+        button {
+            /* dizajn "tlačidiel" pre výber funkcie */
+            background-color: var(--gray_color);
+            font-size: 1em;
+            font-weight: 500;
+            letter-spacing: 1px;
+            padding: 5px 10px;
+            margin: 10px 0;
+            border: 1px solid var(--color);
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            max-width: 500px;
+        }
+
+        .active {
+            /* "aktívne" tlačidlá */
+            /*background-color: rgb(164, 253, 142);*/
+            background-color: var(--bg_color);
+        }
+
+        /*section {
+
+        }*/
+
+        .grid {
+            max-width: 60ch;
+            display: grid;
+            background-color: var(--space_color);
+            grid-template-columns: 1fr 1fr 3fr 1fr 1fr;
+            grid-template-rows: 5rem 5rem 5rem;
+            gap: 5px;
+            padding: 5px;
+            margin-top: 0.55rem;
+        }
+
+        .item {
+            background-color: var(--bg_color);
+        }
+
+        .item1 {
+            background-color: var(--item_color2);
+            grid-column: 2/5;
+            grid-row: 2;
+            text-align: center;
+        }
+
+        .item2 {
+            background-color: var(--item_color3);
+
+        }
+
+
+
+        .area1 {
+            grid-template-areas:
+                "header header header header logo"
+                "main main main sidebar sidebar"
+                "footer footer . sidebar sidebar";
+        }
+
+        .area2 {
+            grid-template-areas:
+                "logo header header header sidebar"
+                "main main main main sidebar"
+                ". . footer .  sidebar";
+        }
+
+        .res1 {
+            grid-template-columns: 1fr 1fr 2fr 2fr 1fr 1fr;
+            grid-template-rows: 5rem 5rem 5rem 2rem;
+            grid-template-areas:
+                "logo header header header header header"
+                "menu menu main main sidebar sidebar"
+                "menu menu main main sidebar sidebar"
+                "footer footer footer footer footer footer";
+        }
+
+        .res2 {
+            grid-template-columns: 1fr 2fr 1fr 1fr;
+            grid-template-rows: 5rem 5rem 5rem 5rem 5rem 2rem;
+            grid-template-areas:
+                "logo header header header"
+                "menu menu sidebar sidebar"
+                "menu menu sidebar sidebar"
+                "main main main main"
+                "main main main main"
+                "footer footer footer footer";
+        }
+
+        .res3 {
+            grid-template-columns: 1fr 2fr 2fr;
+            grid-template-rows: 5rem 5rem 5rem 5rem 5rem 2rem;
+            grid-template-areas:
+                "logo header header"
+                "menu menu menu"
+                "main main main"
+                "main main main"
+                "sidebar sidebar sidebar"
+                "footer footer footer";
+        }
+
+
+        #grid-ji>.item {
+            min-width: 70%;
+            text-align: center;
+        }
+
+        #grid-ai>.item {
+            min-height: 70%;
+            text-align: center;
+        }
+
+        #grid-jc {
+            grid-template-columns: auto auto 30% auto auto;
+            text-align: center;
+        }
+
+        #grid-ac {
+            grid-template-rows: auto 30% auto;
+            height: 12rem;
+            text-align: center;
+        }
+
+        #grid-ps {
+            grid-template-columns: 1fr 3fr 1fr;
+            grid-template-rows: 2rem 6rem 2rem;
+        }
+
+        #grid-ps :nth-child(5) {
+            place-self: stretch stretch;
+        }
+
+        .pic {
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: start;
+        }
+
+
+        .pic a {
+            text-decoration: none;
+        }
+
+        .pic img {
+            display: block;
+            margin: auto;
+            width: 90%;
+        }
+
+
+        @media only screen and (max-width: 680px) {
+
+            .pic {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="width">
+
+        <h2>Grafický interaktívny tutoriál s ukážkami čo je "grid"<br>
+            (ako funguje, ako ho využiť)</h2>
+
+        <div id="fonts">
+            <script src="/js_font_size_menu.js"></script>
+        </div>
+        <br>
+
+        <p class="text" style="text-align: center;">Tento "interaktívny návod" je pokračovaním môjho mini návodu o
+            základnom
+            fungovaní a používaní flex-u pri tvorbe web layoutu -
+            <a href="http://danielgago.sk/testy/flex-box_tutorialPage.html" target="_blank"> "flex-box tutoriál"</a>.
+            <br>
+            Ak ti vyhovuje radšej videoobsah, tak napríklad
+            <a href="https://www.youtube.com/watch?v=0-DY8J_skZ0&ab_channel=codeSTACKr" target="_blank">toto video</a>
+            od toho istého tvorcu ako video o flex-e sa oplatí pozrieť.
+        </p>
+        <br>
+        <p class="text">Nie je to úplne plnohodnotný a komplexný sprievodca ako funguje grid, ale je tu veľmi názorne
+            ukázaný základ jeho fungovania.
+            To hlavné na pochopenie fungovania, prípadne možností kde to využiť. A môže to byť taká rýchla interaktívna
+            nápoveda.<br>
+            Celý kód je v jednom súbore (aj CSS, aj JS scripty v jednom html) aby bolo možné si ho jednoducho
+            prekopírovať do svojho editora a ďalej s
+            ním pracovať a skúšať si prípadne svoje úpravy v kóde. Myslím že pre začiatočníkov to bude fajn
+            pomôcka...<br>
+            Asi plnohodnotný prehľad k tomu je aj na stránkach
+            <a href="https://css-tricks.com/snippets/css/complete-guide-grid/" target="_blank">css-tricks.com</a>
+            , odtiaľto som celé podklady aj ja čerpal. Tam to rozobrali naozaj do detailov.
+            <br>
+        </p>
+        <p class="text"><strong>Majte na pamäti že správny výsledok layoutu stránky získate až správnou kombináciou tu
+                predstavených jednotlivých možností!!!</strong></p>
+        <div class="line"></div>
+
+        <section>
+            <h3>Čo je grid, na čo to je dobré pri tvorbe webu</h3>
+            <p class="text">
+                Na pozíciovanie (upratovanie) blokov na web stránke a ich obsahu. Hlavná sila grid je v tom že dokáže
+                obsah upratovať
+                nie len v jednej línii (na to je flex) ale dokáže ladiť aj ako stĺpce tak aj riadky a teda celé mreže
+                (grid) blokov na
+                stránke. Či treba grid alebo (stačí) flex záleží napríklad od toho či treba riešiť aj pomery výšky
+                elementov, presah jednotlivých blokov cez viaceré riadky, prípadne či (prevažne pri responzivite) treba
+                riešiť výrazné zmeny preusporiadania veľkostí ale hlavne aj poradia blokov. To zvláda grid bez
+                problémov (flex tu má limity), v ukážkach to spomeniem čo to dokáže a kedy sa to hodí. Mobilná verzia
+                stránky môže byť
+                vďaka tomuto úplne inak
+                preskladaná ako verzia pre veľké PC monitory (a robí sa to úplne jednoducho...). <br>
+                <strong>Vlastnosti v gride sa riešia na dvoch úrovniach:</strong><br>
+                <strong>- vlastnosti rodiča</strong> - grid kontajnera (veľkosti a usporiadanie blokov v mriežke, alebo
+                ich obsahu -
+                definujú sa vo vlastnostiach kontajnera)<br>
+                <strong>- vlastnosti detí</strong> - elementov v mriežke - jednotlivých buniek (usporiadanie jednej
+                konkrétnej bunky v
+                mriežke, alebo nastavenie pozície jej obsahu - definuje sa to vo vlastnostiach tej
+                samotnej bunky)
+            </p>
+        </section>
+
+        <div class="line"></div>
+
+        <section>
+            <h3>Poďme pekne po poriadku...</h3>
+            <p class="text">Osnova tohoto tutoriálu je nasledovná (klikni na obsah ktorý ťa práve zaujíma): </p>
+            <div style="cursor: pointer; background-color: var(--gray_color); padding: 3px 10px;"
+                onclick="document.getElementById(`chapter1`).scrollIntoView({ behavior: 'smooth' })">
+                <span style="font-weight: 600;">Kapitola 1 </span>
+                - základná práca s mriežkou a ukážky programovania vlastností samotnej mriežky - rodiča, a pozíciovanie
+                jej
+                blokov
+            </div><br>
+            <div style="cursor: pointer; background-color: var(--gray_color); padding: 3px 10px;"
+                onclick="document.getElementById(`chapter2`).scrollIntoView({ behavior: 'smooth' })">
+                <span style="font-weight: 600;">Kapitola 2 </span>
+                - ukážky programovania vlastností detí (konkrétnych buniek v mriežke) prípadne obsahu v danej
+                jednotlivej bunke
+            </div><br>
+            <div style="cursor: pointer; background-color: var(--gray_color); padding: 3px 10px;"
+                onclick="document.getElementById(`chapter3`).scrollIntoView({ behavior: 'smooth' })">
+                <span style="font-weight: 600;">Kapitola 3 </span>
+                - praktické ukážky využitia gridu pre tvorbu stránky - rozloženie obsahu s využitím viacerých
+                možností gridu naraz (lebo pri týchto ukážkach jednotlivých inštrukcií občas nie je vidno aký to má
+                celkový zmysel a efekt na veľkej stránke...)
+            </div>
+
+        </section>
+
+        <div class="line"></div>
+
+        <section id="chapter1">
+            <h3 style="background-color: var(--gray_color); padding: 0.7rem;">Kapitola 1 - základná práca s mriežkou
+            </h3>
+        </section>
+
+        <div class="line"></div>
+
+        <section id="gr">
+            <h3>Vytvorme si základnú mriežku... <br>
+                (+ jej základné zobrazenie)</h3>
+            <p class="text">
+                Na tejto sa bude dobre dať predvádzať čo môžeme ako nastavovať.
+                Môj kontajner grid obsahuje 15 blokov a jeho základné nastavenia sú takéto:<br>
+                .grid {<br>
+                max-width: 60ch;<br>
+                display: grid;<br>
+                background-color: var(--space_color);<br>
+                grid-template-columns: 1fr 1fr 3fr 1fr 1fr;<br>
+                grid-template-rows: 5rem 5rem 5rem;<br>
+                gap: 5px;<br>
+                padding: 5px;<br>
+                }<br>
+                Čo konkrétny príkaz znamená pre danú mriežku budeme preberať postupne. Jednotlivé bloky nemajú teraz
+                žiadne
+                nastavenia definované, iba farbu pozadia aby ich bolo v mriežke vidno a
+                dal sa rozoznať blok od okrajov a medzier.
+                <br>
+                A výsledok je mriežka ako vidíš tu.<br>
+            </p>
+            <p class="text">A tu si hneď predstavíme prvú možnosť štýlovania - nastaviť si mriežku ako skladačku z blok
+                elementov (tu východzí stav), alebo in-line elementov - nastavená maximálna šírka sa odignoruje a
+                nastaví
+                sa minimálna potrebná pre obsah (presne ako je bežné pri riadkových elementoch...). <br>Klikni na
+                jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
+            <button class="active" onclick="dg(1)">display: grid;<br> (blokové zobrazenie elementov)</button> <br>
+            <button onclick="dg(2)">display: inline-grid;<br> (inline zobrazenie elementov)</button>
+            <p class="text">(Pre ďalšie pokusy ale budem používať prevažne už iba zobrazenie display: grid;.)</p>
+            <div class="grid" id="grid">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+                <div class="item">7</div>
+                <div class="item">8</div>
+                <div class="item">9</div>
+                <div class="item">10</div>
+                <div class="item">11</div>
+                <div class="item">12</div>
+                <div class="item">13</div>
+                <div class="item">14</div>
+                <div class="item">15</div>
+            </div>
+            <script>
+                function dg(p) {
+                    var element = document.getElementById("grid");
+                    var buttons = document.querySelectorAll("#gr>button");
+                    buttons.forEach(e => {
+                        e.classList.remove("active");
+                    });
+                    buttons[p - 1].classList.add("active");
+                    switch (p) {
+                        case 1:
+                            element.style.display = "grid";
+                            break;
+
+                        case 2:
+                            element.style.display = "inline-grid";
+                            break;
+
+                    }
+                }
+            </script>
+        </section>
+
+        <div class="line"></div>
+
+        <section id="gt">
+            <h3>Definujeme jej základnú osnovu (riadky a stĺpce)...</h3>
+            <p class="text">
+                Ďalšie základné nastavenie je definovanie riadkov a stĺpcov mriežky - počty, veľkosti, pomery. Toto
+                nastaví základnú kostru mriežky... Na to sú príkazy: <br>
+                <strong>grid-template-columns: parameters;</strong><br>
+                <strong>grid-template-rows: parameters;</strong><br>
+                kde parametre môžu byť naozaj rôzne...
+                Percentá, pomery (fr - fragment), pixely, "auto", a aj špecifické pre grid, na stránkach <a
+                    href="https://css-tricks.com/snippets/css/complete-guide-grid/" target="_blank">css-tricks</a> je k
+                tomuto dostatok informácií, ja tu dám rovno zopár príkladov aj s grafikou. Pre zaujímavosť - hodnota
+                "auto" je v riadku minimálna výška, ale v stĺpci maximálne využiteľná šírka (keďže máme display: grid; a
+                teda blokové elementy). V praxi sa hodí občas nadefinovať si túto mriežku "hustejšie" a využívať potom
+                pre daktoré bloky viaceré riadky či stĺpce naraz.
+            </p>
+            <p class="text"><strong>Pozor - treba definovať každý riadok, inak tam bude pre tie nedefinované v podstate
+                    len minimum
+                    potrebného priestoru, ako keby som tam dal hodnotu "auto". </strong>Ale dá sa to vyriešiť napríklad
+                príkazom grid-auto-rows: 1fr, a všetky nedefinované riadky dostanú rovnakú veľkosť. Tento príkaz ide
+                využiť aj samostatne ak stačí aby všetky riadky boli rovnaké. Jeho fungovanie ukazuje posledný príklad.
+            </p>
+            <p class="text">Klikni na jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:<br>
+                (8. čka má pridaný obsah a hneď to mení nastavenia aj ostatných blokov v riadku či s stĺpci ak je tam
+                auto...)</p>
+
+            <button class="active" onclick="gt(1)">grid-template-columns: 1fr 1fr 3fr 1fr 1fr;<br>
+                grid-template-rows: 5rem 5rem 5rem;<br> (tu základné nastavenie - stĺpce majú fragmenty a ich
+                pomery,
+                riadky pevne definovanú výšku)</button> <br>
+            <button onclick="gt(2)">grid-template-columns: 30px 30px auto 60px 30px;<br>
+                grid-template-rows: auto 5rem auto;</button> <br>
+            <button onclick="gt(3)">grid-template-columns: 15% 15% auto auto 30%;<br>
+                grid-template-rows: 4rem 7rem 4rem;</button> <br>
+            <button onclick="gt(4)">grid-template-columns: auto auto auto auto auto;<br>
+                grid-template-rows: 2fr 3fr 1fr;</button> <br>
+            <button onclick="gt(5)">grid-template-columns: 1fr 1fr 3fr 1fr 1fr;<br>
+                grid-auto-rows: 1fr;<br>
+            </button>
+
+            <div class="grid" id="grid-gt">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+                <div class="item">7</div>
+                <div class="item">8<br>2.riadok</div>
+                <div class="item">9</div>
+                <div class="item">10</div>
+                <div class="item">11</div>
+                <div class="item">12</div>
+                <div class="item">13</div>
+                <div class="item">14</div>
+                <div class="item">15</div>
+            </div>
+
+            <script>
+                function gt(p) {
+                    var element = document.getElementById("grid-gt");
+                    var buttons = document.querySelectorAll("#gt>button");
+                    buttons.forEach(e => {
+                        e.classList.remove("active");
+                    });
+                    buttons[p - 1].classList.add("active");
+                    switch (p) {
+                        case 1:
+                            element.style.gridTemplateColumns = "1fr 1fr 3fr 1fr 1fr";
+                            element.style.gridTemplateRows = "5rem 5rem 5rem";
+                            break;
+
+                        case 2:
+                            element.style.gridTemplateColumns = "30px 30px auto 60px 30px";
+                            element.style.gridTemplateRows = "auto 5rem auto";
+                            break;
+
+                        case 3:
+                            element.style.gridTemplateColumns = "15% 15% auto auto 30%";
+                            element.style.gridTemplateRows = "4rem 7rem 4rem";
+                            break;
+
+                        case 4:
+                            element.style.gridTemplateColumns = "auto auto auto auto auto";
+                            element.style.gridTemplateRows = "2fr 3fr 1fr";
+                            break;
+
+                        case 5:
+                            element.style.gridTemplateColumns = "1fr 1fr 3fr 1fr 1fr";
+                            element.style.gridTemplateRows = "1fr";
+                            element.style.gridAutoRows = "1fr";
+                            break;
+                    }
+                }
+            </script>
+        </section>
+
+        <div class="line"></div>
+
+        <section id="area">
+            <h3>Definujeme základné rozloženie blokov v mriežke </h3>
+            <p class="text">
+                Je viacero spôsobov ako si definovať rozloženie blokov v mriežke. Dajú sa jednotlivé bloky priamo
+                definovať, ale ide to aj pomocou <strong>"grid-template-areas"</strong> kde sa nadefinuje pomocou jednej
+                osnovy pre celú mriežku ktorý blok má byť ako umiestnený v danej mriežke (aj na viacerých riadkoch či
+                stĺpcoch). Takto sa ľahko rieši responzivita - prepíše sa osnova... Na toto treba aby boli
+                definované jednotlivé prvky osnovy - že ktorý blok má byť ktorá časť osnovy (tu je príklad):<br>
+                element {"grid-area: header;}<br>
+                Aj tu používam základné rozloženie mriežky 5x3, ale už sa tu nedefinuje 15 blokov, ale iba toľko s
+                koľkými pracujem - teda tu konkrétne 5 (jeden pre header, jeden pre main, jeden pre sidebar, jeden pre
+                footer a jeden pre logo)!
+            </p>
+            <p class="text">POZOR - toto má aj dajaké obmedzenia - útvary v mriežke môžu byť iba štvorce alebo obdĺžniky
+                (pod sebou, vedľa seba), žiadne L-ká takto nevytvoríme...</p>
+            <p class="text">Klikni na jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
+            <button class="active" onclick="area(1)">grid-template-areas:<br>
+                "header header header header logo"<br>
+                "main main main sidebar sidebar"<br>
+                "footer footer . sidebar sidebar" ;</button>
+            <button onclick="area(2)">grid-template-areas:<br>
+                "logo header header header sidebar"<br>
+                "main main main main sidebar"<br>
+                ". . footer . sidebar" ;</button>
+            <div class="grid area1" id="grid-area">
+                <div style="grid-area: header; background-color: var(--item_color1);">header</div>
+                <div style="grid-area: main; background-color: var(--item_color2);">main</div>
+                <div style="grid-area: sidebar; background-color: var(--item_color3);">sidebar</div>
+                <div style="grid-area: footer; background-color: var(--item_color1);">footer</div>
+                <div style="grid-area: logo; background-color: rgba(255, 255, 0, 0.5);">logo</div>
+            </div>
+            <br>
+            <p>A aby sa tieto definície riadkov, stĺpcov a rozloženia blokov v mriežke nedefinovali po jednom, tak
+                existuje aj kombinovaný zápis kde sa to dá napísať do jedného nastavenia. Ale to je na začiatok zbytočne
+                zložité a výsledok na stránke je rovnaký. </p>
+            <script>
+                function area(p) {
+                    var element = document.getElementById("grid-area");
+                    var buttons = document.querySelectorAll("#area>button");
+                    buttons.forEach(e => {
+                        e.classList.remove("active");
+                    });
+                    buttons[p - 1].classList.add("active");
+                    switch (p) {
+                        case 1:
+                            element.classList.remove("area2");
+                            element.classList.add("area1");
+                            break;
+
+                        case 2:
+                            element.classList.remove("area1");
+                            element.classList.add("area2");
+                            break;
+
+                    }
+                }
+            </script>
+
+        </section>
+
+        <div class="line"></div>
+
+        <section id="gap">
+            <h3>Riešime medzery medzi blokmi v mriežke</h3>
+            <p class="text">
+                Tu si vysvetlíme ako sa riešia tie šedé medzery čo tu mám vo vnútri mriežky medzi blokmi. Je na to
+                príkaz
+                <strong>"gap"</strong> a jeho modifikácie ak potrebujeme medzery ladiť iba zvisle alebo iba
+                vodorovne.<br>
+                V mojom základnom nastavení mám iba príkaz gap:5px; a teda všetky medzery sú rovnaké 5 pixelov
+                (vodorovne aj
+                zvisle, ale pozor - nie tie po krajoch, to sa takto nerieši, tam mám iba padding teraz, inak by bol
+                obsah blokov nalepený na okraje mriežky!!). Samozrejme idú použiť aj iné jednotky ako len pixely.
+            </p>
+            <p class="text">Klikni na
+                jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
+            <button class="active" onclick="gap(1)">gap: 5px;<br> (vodorovne aj zvislo rovnaké medzery)</button> <br>
+            <button onclick="gap(2)">column-gap: 2px; row-gap: 10px;<br> (rozdielne zvislé a vodorovné medzery)</button><br>
+            <button onclick="gap(3)">column-gap: 1%; row-gap: 0.7rem;<br> (dajaké iné jednotky ako px)</button>
+            <div class="grid" id="grid-gap">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+                <div class="item">7</div>
+                <div class="item">8</div>
+                <div class="item">9</div>
+                <div class="item">10</div>
+                <div class="item">11</div>
+                <div class="item">12</div>
+                <div class="item">13</div>
+                <div class="item">14</div>
+                <div class="item">15</div>
+            </div>
+            <script>
+                function gap(p) {
+                    var element = document.getElementById("grid-gap");
+                    var buttons = document.querySelectorAll("#gap>button");
+                    buttons.forEach(e => {
+                        e.classList.remove("active");
+                    });
+                    buttons[p - 1].classList.add("active");
+                    switch (p) {
+                        case 1:
+                            element.style.gap = "5px";
+                            break;
+
+                        case 2:
+                            element.style.columnGap = "2px";
+                            element.style.rowGap = "10px";
+                            break;
+
+                        case 3:
+                            element.style.columnGap = "1%";
+                            element.style.rowGap = "0.7rem";
+                            break;
+
+                    }
+                }
+            </script>
+        </section>
+
+        <div class="line"></div>
+
+        <section id="ji">
+            <h3>Riešime zarovnávanie obsahu blokov v mriežke v osi x</h3>
+            <p class="text">
+                Začíname ladiť zarovnávanie obsahu blokov v mriežke. Najskôr v osi x, pomocou príkazu
+                <strong>justify-itmes</strong>. Tu sa dostávame k podobným vlastnostiam a parametrom ako pri "flex",
+                takže netreba veľa informácií, je to relatívne jasné čo to robí, budú tu iba tlačidlá aby bolo vidno tie
+                zmeny. Bloky dostali ešte minimálnu šírku 70% a text na stred aby to ako tak vyzeralo, lebo inak tam
+                bolo príliš "prázdno"...
+            </p>
+            <p class="text">Klikni na
+                jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
+            <button class="active" onclick="ji(1)">justify-items: stretch;<br> (základ - roztiahnutý obsah)</button> <br>
+            <button onclick="ji(2)">justify-items: start;<br> (natlač obsah buniek na začiatok)</button><br>
+            <button onclick="ji(3)">justify-items: end;<br> (natlač obsah buniek na koniec)</button><br>
+            <button onclick="ji(4)">justify-items: center;<br> (natlač obsah na stred)</button><br>
+            <div class="grid" id="grid-ji">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+                <div class="item">7</div>
+                <div class="item">8</div>
+                <div class="item">9</div>
+                <div class="item">10</div>
+                <div class="item">11</div>
+                <div class="item">12</div>
+                <div class="item">13</div>
+                <div class="item">14</div>
+                <div class="item">15</div>
+            </div>
+            <script>
+                function ji(p) {
+                    var element = document.getElementById("grid-ji");
+                    var buttons = document.querySelectorAll("#ji>button");
+                    buttons.forEach(e => {
+                        e.classList.remove("active");
+                    });
+                    buttons[p - 1].classList.add("active");
+                    switch (p) {
+                        case 1:
+                            element.style.justifyItems = "stretch";
+                            break;
+
+                        case 2:
+                            element.style.justifyItems = "start";
+                            break;
+
+                        case 3:
+                            element.style.justifyItems = "end";
+                            break;
+
+                        case 4:
+                            element.style.justifyItems = "center";
+                            break;
+
+
+
+                    }
+                }
+            </script>
+        </section>
+
+        <div class="line"></div>
+
+        <section id="ai">
+            <h3>Riešime zarovnávanie obsahu blokov v mriežke v osi y</h3>
+            <p class="text">
+                V osi y sa to robí pomocou príkazu <strong>align-itmes</strong>. Parametre v podstate zhodné s
+                predchádzajúcim príkazom, len tu sa upravila výška na minimálne 70% aby boli vidieť zmeny.
+            </p>
+            <p class="text">Klikni na
+                jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
+            <button class="active" onclick="ai(1)">align-items: stretch;<br> (základ - roztiahnutý obsah)</button> <br>
+            <button onclick="ai(2)">align-items: start;<br> (natlač všetko na začiatok)</button><br>
+            <button onclick="ai(3)">align-items: end;<br> (natlač všetko na koniec)</button><br>
+            <button onclick="ai(4)">align-items: center;<br> (natlač všetko na stred)</button><br>
+            <div class="grid" id="grid-ai">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+                <div class="item">7</div>
+                <div class="item">8</div>
+                <div class="item">9</div>
+                <div class="item">10</div>
+                <div class="item">11</div>
+                <div class="item">12</div>
+                <div class="item">13</div>
+                <div class="item">14</div>
+                <div class="item">15</div>
+            </div>
+            <script>
+                function ai(p) {
+                    var element = document.getElementById("grid-ai");
+                    var buttons = document.querySelectorAll("#ai>button");
+                    buttons.forEach(e => {
+                        e.classList.remove("active");
+                    });
+                    buttons[p - 1].classList.add("active");
+                    switch (p) {
+                        case 1:
+                            element.style.alignItems = "stretch";
+                            break;
+
+                        case 2:
+                            element.style.alignItems = "start";
+                            break;
+
+                        case 3:
+                            element.style.alignItems = "end";
+                            break;
+
+                        case 4:
+                            element.style.alignItems = "center";
+                            break;
+
+                    }
+                }
+            </script>
+        </section>
+
+        <div class="line"></div>
+
+        <section id="jc">
+            <h3>Riešime zarovnávanie samotného obsahu mriežky (všetkých jej blokov) v osi x</h3>
+            <p class="text">
+                Začíname ladiť zarovnávanie celého obsahu v mriežke. Najskôr v osi x, pomocou príkazu
+                <strong>justify-content</strong>. Zasa je to podobné ako pri flexe, stačí pre názornosť pozerať "čo to
+                robí". Ale POZOR aby neboli definované šírky napríklad pomocou fr - pomerov frakcií, potom budú stále
+                roztiahnuté na celú šírku... Napríklad tento kontajner dostal rozloženie grid-template-columns: auto
+                auto 30% auto auto; Ak bolo 1fr 1fr 5fr 1fr 1fr sa sa v šírkach blokov nič nemenilo. Možné sú aj
+                percentá, ale funkcia "stretch" bude fungovať iba ak tam bude aspoň jedno "auto". Nepomohlo ani zadať
+                display: inline-grid; - obsah sa ani vtedy nerozťahoval.
+            </p>
+            <p class="text">Klikni na
+                jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
+            <button class="active" onclick="jc(1)">justify-content: stretch;<br> (základ - roztiahnutý obsah)</button> <br>
+            <button onclick="jc(2)">justify-content: start;<br> (natlač všetko na začiatok)</button><br>
+            <button onclick="jc(3)">justify-content: end;<br> (natlač všetko na koniec)</button><br>
+            <button onclick="jc(4)">justify-content: center;<br> (natlač všetko na stred)</button><br>
+            <button onclick="jc(5)">justify-content: space-between;<br> (roztiahni obsah po kraje)</button><br>
+            <button onclick="jc(6)">justify-content: space-evenly;<br> (roztiahni obsah rovnomerne)</button><br>
+            <div class="grid" id="grid-jc">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+                <div class="item">7</div>
+                <div class="item">8</div>
+                <div class="item">9</div>
+                <div class="item">10</div>
+                <div class="item">11</div>
+                <div class="item">12</div>
+                <div class="item">13</div>
+                <div class="item">14</div>
+                <div class="item">15</div>
+            </div>
+            <script>
+                function jc(p) {
+                    var element = document.getElementById("grid-jc");
+                    var buttons = document.querySelectorAll("#jc>button");
+                    buttons.forEach(e => {
+                        e.classList.remove("active");
+                    });
+                    buttons[p - 1].classList.add("active");
+                    switch (p) {
+                        case 1:
+                            element.style.justifyContent = "stretch";
+                            break;
+
+                        case 2:
+                            element.style.justifyContent = "start";
+                            break;
+
+                        case 3:
+                            element.style.justifyContent = "end";
+                            break;
+
+                        case 4:
+                            element.style.justifyContent = "center";
+                            break;
+
+                        case 5:
+                            element.style.justifyContent = "space-between";
+                            break;
+
+                        case 6:
+                            element.style.justifyContent = "space-evenly";
+                            break;
+
+                    }
+                }
+            </script>
+        </section>
+
+        <div class="line"></div>
+
+        <section id="ac">
+            <h3>Riešime zarovnávanie samotného obsahu mriežky (všetkých jej blokov) v osi y</h3>
+            <p class="text">
+                V osi y sa to robí pomocou príkazu <strong>align-content</strong>. Parametre opäť zhodné s
+                predchádzajúcim príkazom. Zasa treba dbať na to čo je definované pri "grid-template-rows" aby to
+                fungovalo. Pevne definované výšky sa taktiež nerozťahujú na celú výšku! Aspoň jedna tam musela byť auto
+                aby fungovala funkcia "stretch". Teraz je pre názornosť: auto 30% auto.
+            </p>
+            <p class="text">Klikni na
+                jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
+            <button class="active" onclick="ac(1)">align-content: stretch;<br> (základ - roztiahnutý obsah)</button> <br>
+            <button onclick="ac(2)">align-content: start;<br> (natlač všetko na začiatok)</button><br>
+            <button onclick="ac(3)">align-content: end;<br> (natlač všetko na koniec)</button><br>
+            <button onclick="ac(4)">align-content: center;<br> (natlač všetko na stred)</button><br>
+            <button onclick="ac(5)">align-content: space-between;<br> (roztiahni obsah po kraje)</button><br>
+            <button onclick="ac(6)">align-content: space-evenly;<br> (roztiahni obsah rovnomerne)</button><br>
+            <div class="grid" id="grid-ac">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+                <div class="item">7</div>
+                <div class="item">8</div>
+                <div class="item">9</div>
+                <div class="item">10</div>
+                <div class="item">11</div>
+                <div class="item">12</div>
+                <div class="item">13</div>
+                <div class="item">14</div>
+                <div class="item">15</div>
+            </div>
+            <script>
+                function ac(p) {
+                    var element = document.getElementById("grid-ac");
+                    var buttons = document.querySelectorAll("#ac>button");
+                    buttons.forEach(e => {
+                        e.classList.remove("active");
+                    });
+                    buttons[p - 1].classList.add("active");
+                    switch (p) {
+                        case 1:
+                            element.style.alignContent = "stretch";
+                            break;
+
+                        case 2:
+                            element.style.alignContent = "start";
+                            break;
+
+                        case 3:
+                            element.style.alignContent = "end";
+                            break;
+
+                        case 4:
+                            element.style.alignContent = "center";
+                            break;
+
+                        case 5:
+                            element.style.alignContent = "space-between";
+                            break;
+
+                        case 6:
+                            element.style.alignContent = "space-evenly";
+                            break;
+
+                    }
+                }
+            </script>
+        </section>
+        <br>
+        <p class="text"><strong>Myslím že toto by stačilo na začiatky, všetko hlavné čo sa týka ladenia samotnej mriežky
+                je tu vidno. Ešte je zopár špeciálnych možností čo grid vie, všetko je spomenuté na stránke <a
+                    href="https://css-tricks.com/snippets/css/complete-guide-grid/" target="_blank">css-tricks.com</a>.
+                Alebo napríklad jedna zaujímavá funkcia je aj v <a
+                    href="https://www.youtube.com/watch?v=-0fAhoahXYw&t=145s">tomto videu</a> od šikovného experta -
+                "subgrid" - akoby mriežka v mriežke. <br>
+                <br>
+                A môžeme ísť ešte teda ladiť jednotlivé bunky
+                mriežky:</strong> </p>
+
+        <div class="line"></div>
+
+
+        <section id="chapter2">
+            <h3 style="background-color: var(--gray_color); padding: 0.7rem;">Kapitola 2 - ladíme vlastnosti jednotlivej
+                bunky alebo jej obsahu v mriežke</h3>
+        </section>
+
+        <div class="line"></div>
+
+        <section id="set">
+            <h3>Nastavme pozíciu a veľkosť jednej konkrétnej bunke...</h3>
+            <p class="text">
+                V tejto kapitole už toho veľa nebude, ale dám sem len úplne základné (a dôležité) veci. Jedna z nich je
+                ako nastaviť jednej konkrétnej bunke presnú pozíciu v mriežke (veľa krát sa to hodí...). Táto bunka sa
+                zaradí na definované miesto, tam zaberie toľko miesta koľko má nastavené, a všetky ostatné bunky sa
+                posunú "ďalej" kam môžu.<br>
+                Jedna z možností ako sa to nastavuje je sada dvoch príkazov ktoré definujú pozíciu bunky v oboch osiach:
+                <br>
+                <strong>grid-column: parametre;<br>
+                    grid-row: parametre;</strong><br>
+                Parameter môže byť jeden, v podstate akoby x-ová alebo y-ová súradnica pre danú bunku, alebo budú dva -
+                kde prvý je štartovacia súradnica a druhý koncová. Tu pozor ako sa berú tie "body" - berú sa tu všetky
+                okraje v mriežke - táto 5x3 má vlastne v osi x 6 okrajov (1-6) a ak budem chcieť bunku po koniec tak
+                posledný bod bude 6! Bude to vidno v príkladoch...<br>
+                Nie je problém takto bunky do seba aj vnárať (aby sa "neposunuly" tak dostanú každá potrebné súradnice
+                aj "spodná", aj "vrchná"). Lepšie budú príklady (sú v záverečnej kapitole). Základ ukážky má súradnice napísané tak že začína v
+                druhom stĺpci (2. okraj od kraja) a končí vo štvrtom stĺpci (5. okraj od kraja), je to jednoduchý zápis.
+                Ako riadok má len 2, to stačí ak neprechádza viacerými (zápis 2/3 je taktiež funkčný). Všimni si ako sa
+                presúvajú bunky okolo pri zmenách... Treba s tým rátať pri vytváraní mriežky stránky! A taktiež je tu vidno ako zostáva prázdne miesto ak je menej definovaných buniek ako celkovo vojde do mriežky (posledné dva príklady).
+            </p>
+            <p class="text">Klikni na
+                jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
+            <button class="active" onclick="set(1)">grid-column: 2/5; grid-row: 2; <br>(základ - bunka je na
+                strede)</button> <br>
+            <button onclick="set(2)">grid-column: 3/6; grid-row: 1; <br>(vpravo hore)</button><br>
+            <button onclick="set(3)">grid-column: 5; grid-row: 1/4; <br>(vpravo v celej výške)</button><br>
+            <button onclick="set(4)">grid-column: 3/5; grid-row: 3; <br>(dolu ale o blok kratší, takže zostala
+                fuga...)</button><br>
+            <button onclick="set(5)">grid-column: 1; grid-row: 3; <br>(dolu, zápis pomocou jedného parametra, takže
+                bunka na jeden blok, a ešte viac miesta zostalo)</button><br>
+            <div class="grid" id="grid-set">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+                <div class="item">7</div>
+                <div class="item">8</div>
+                <div class="item">9</div>
+                <div class="item">10</div>
+                <div class="item">11</div>
+                <div class="item">12</div>
+                <!--<div class="item">13</div>
+                <div class="item">14</div>
+                <div class="item">15</div>-->
+                <div class="item1" id="item1">+++<br>+++</div>
+            </div>
+            <script>
+                function set(p) {
+                    var element = document.getElementById("item1");
+                    var buttons = document.querySelectorAll("#set>button");
+                    buttons.forEach(e => {
+                        e.classList.remove("active");
+                    });
+                    buttons[p - 1].classList.add("active");
+                    switch (p) {
+                        case 1:
+                            element.style.gridColumn = "2/5";
+                            element.style.gridRow = "2";
+                            break;
+
+                        case 2:
+                            element.style.gridColumn = "3/6";
+                            element.style.gridRow = "1";
+                            break;
+
+                        case 3:
+                            element.style.gridColumn = "5";
+                            element.style.gridRow = "1/4";
+                            break;
+
+                        case 4:
+                            element.style.gridColumn = "3/5";
+                            element.style.gridRow = "3";
+                            break;
+
+                        case 5:
+                            element.style.gridColumn = "1";
+                            element.style.gridRow = "3";
+                            break;
+
+                    }
+                }
+            </script>
+        </section>
+
+        <div class="line"></div>
+
+        <section id="ps">
+            <h3>A ešte zrýchlene upraceme obsah v bunke </h3>
+            <p class="text">
+                Máme na výber dve možnosti - buď dva príkazy "justify-self" a "align-self" aby sme ten obsah ladili v
+                jednej alebo v druhej osi, alebo rovno "place-self" a naladíme to naraz... Ukážka je pomocou place-self.
+                Ako parametre sú už známe hodnoty z iných príkazov, takže je to viac menej jasné ako to funguje. Prvý je
+                pre os y, druhý pre os x. Ak je jeden, je pre obe osi.
+            </p>
+            <p class="text">Klikni na
+                jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
+            <button class="active" onclick="ps(1)">place-self: stretch;<br> (základ - roztiahnutý obsah)</button> <br>
+            <button onclick="ps(2)">place self: start;<br> (natlač všetko na začiatok)</button><br>
+            <button onclick="ps(3)">place-self: end;<br> (natlač všetko na koniec)</button><br>
+            <button onclick="ps(4)">place-self: center;<br> (natlač všetko na stred)</button><br>
+            <button onclick="ps(5)">place-self: start center;<br> (kombinácia - hore stred)</button><br>
+            <button onclick="ps(6)">place-self: end start;<br> (kombinácia - vľavo dolu)</button><br>
+            <div class="grid" id="grid-ps">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item2" id="place">XXX<br>XXXXX<br>XXX</div>
+                <div class="item">6</div>
+                <div class="item">7</div>
+                <div class="item">8</div>
+                <div class="item">9</div>
+            </div>
+            <script>
+                function ps(p) {
+                    var element = document.getElementById("place");
+                    var buttons = document.querySelectorAll("#ps>button");
+                    buttons.forEach(e => {
+                        e.classList.remove("active");
+                    });
+                    buttons[p - 1].classList.add("active");
+                    switch (p) {
+                        case 1:
+                            element.style.placeSelf = "stretch";
+                            break;
+
+                        case 2:
+                            element.style.placeSelf = "start";
+                            break;
+
+                        case 3:
+                            element.style.placeSelf = "end";
+                            break;
+
+                        case 4:
+                            element.style.placeSelf = "center";
+                            break;
+
+                        case 5:
+                            element.style.placeSelf = "start center";
+                            break;
+
+                        case 6:
+                            element.style.placeSelf = "end start";
+                            break;
+
+                    }
+                }
+            </script>
+        </section>
+
+
+        <div class="line"></div>
+
+        <section id="chapter3">
+            <h3 style="background-color: var(--gray_color); padding: 0.7rem;">Kapitola 3 - praktické ukážky rozloženia
+                blokov v
+                mriežke a obsahu v nich pri tvorbe stránky</h3>
+        </section>
+
+        <div class="line"></div>
+
+        <section id="res">
+            <h3> Dajaké ukážky možnej responzivity stránky </h3>
+            <p class="text">
+                V tejto "praktickej časti" pridám hlavne ukážku možnej responzivity pomocou grid. Základ je navrhnúť si
+                vhodnú základnú mriežku... Kľudne radšej hustejšiu, bude viac možností manipulácie s blokmi, ničomu to
+                nevadí ak je viac riadkov alebo stĺpcov. V jednotlivých príkladoch vidno ako je to nakódované a ako to
+                potom vyzerá to rozloženie. Sú tu 3 varianty - akoby "monitor PC", "tablet" a "mobil". Vždy mám iba tie
+                isté bloky (logo, header atď.) a tie príkazy čo vidno v jednotlivých bublinách to potom takto spracujú.
+            </p>
+            <p class="text">Tu mám ešte zopár vecí k tomuto: <br>
+                - nejde napríklad 2 krát použiť ten istý blok... Škoda, také
+                logo by som tam hodil aj na viaceré miesta. Ale je to logické, ten blok je iba jeden. A stačí ho teda
+                nakopírovať.<br>
+                - ak zadáte dačo v
+                tom príkaze "grid-template-areas" čo je nevhodné, tak sa nezobrazí nič (ak by napríklad vychádzal
+                element do L), alebo sa mriežka (občas) úplne rozsype, alebo daktorý (nedefinovaný) blok zostane "mimo".
+                Tak treba najskôr zadať všetky potrebné hodnoty. Ja tu používam definované výšky v rem aby to dajako
+                vyzeralo,
+                ale v praxi asi treba "auto", alebo ak to vyhovuje viac tak pomery (fr) kto by sa triafal pravda do
+                výšky bloku... </p>
+            <p class="text"><strong>A tu je ešte odkaz na jednoduchú stránku s mini obsahom ktorá je komplet vytvorená
+                    pomocou grid a kde je tá responzivita plne funkčná:
+                    <a href="http://danielgago.sk/testy/grid_tutorial_respozivita.html" target="_blank">(klik)</a>.
+                </strong></p>
+            <p class="text">Klikni na jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
+            <button class="active" onclick="res(1)"> <strong>PC</strong><br>
+                grid-template-columns: 1fr 1fr 2fr 2fr 1fr 1fr;<br>
+                grid-template-rows: 5rem 5rem 5rem 2rem;<br>
+                grid-template-areas:<br>
+                "logo header header header header header"<br>
+                "menu menu main main sidebar sidebar"<br>
+                "menu menu main main sidebar sidebar"<br>
+                "footer footer footer footer footer footer";</button><br>
+            <button onclick="res(2)"> <strong>tablet</strong><br>
+                grid-template-columns: 1fr 2fr 1fr 1fr;<br>
+                grid-template-rows: 5rem 5rem 5rem 5rem 5rem 2rem;<br>
+                grid-template-areas:<br>
+                "logo header header header"<br>
+                "menu menu sidebar sidebar"<br>
+                "menu menu sidebar sidebar"<br>
+                "main main main main"<br>
+                "main main main main"<br>
+                "footer footer footer footer";</button> <br>
+            <button onclick="res(3)"> <strong>mobil</strong><br>
+                grid-template-columns: 1fr 2fr 2fr;<br>
+                grid-template-rows: 5rem 5rem 5rem 5rem 5rem 2rem;<br>
+                grid-template-areas:<br>
+                "logo header header"<br>
+                "menu menu menu"<br>
+                "main main main"<br>
+                "main main main"<br>
+                "sidebar sidebar sidebar"<br>
+                "footer footer footer";</button>
+            <div class="grid res1" id="grid-res">
+                <div style="grid-area: header; background-color: var(--item_color1);">header</div>
+                <div style="grid-area: main; background-color: var(--item_color2);">main</div>
+                <div style="grid-area: sidebar; background-color: var(--item_color3);">sidebar</div>
+                <div style="grid-area: footer; background-color: var(--item_color1);">footer</div>
+                <div style="grid-area: logo; background-color: rgba(255, 255, 0, 0.5);">logo</div>
+                <div style="grid-area: menu; background-color: rgba(0, 255, 0, 0.5);">menu</div>
+            </div>
+            <script>
+                function res(p) {
+                    var element = document.getElementById("grid-res");
+                    var buttons = document.querySelectorAll("#res>button");
+                    buttons.forEach(e => {
+                        e.classList.remove("active");
+                    });
+                    element.classList.remove("res1", "res2", "res3");
+                    buttons[p - 1].classList.add("active");
+                    switch (p) {
+                        case 1:
+                            element.classList.add("res1");
+                            break;
+
+                        case 2:
+                            element.classList.add("res2");
+                            break;
+
+                        case 3:
+                            element.classList.add("res3");
+                            break;
+
+                    }
+                }
+            </script>
+
+        </section>
+
+        <div class="line"></div>
+
+        <section>
+            <h3>Vytvoril som si dve skúšobné stránky...</h3>
+            <p class="text">Aby som to vyskúšal aspoň trochu v praxi tak som vytvoril 2 skúšobné stránky kde je niekoľko
+                vlastností použitých. Jedna stránka je čisto o
+                kódovaní - má len základné bloky, druhá dostala "pseudo obsah" aby bolo viditeľné praktické použitie.
+                Obe
+                majú podobný základ, sú tam ukážky vnárania sa buniek do seba a náznak toho ako to praktický využiť.
+                (POZOR - tie stránky nie sú responzívne!)
+                Obe sú nakódované iba pomocou definovania rozloženia stĺpcov (grid-template-columns: 1fr 2fr 1fr;) a
+                ladenia pozície pre niektoré konkrétne bunky (a ostatné bunky sú automaticky doukladané). Nie je to
+                pomocou grid-area, a aj preto sa bude ťažšie robiť prípadná responzivita... S tou som tu nerátal, robil
+                som to čisto na pokusy s ladením buniek.</p>
+            <p class="text">Obrázky náhľadov na stránky sú "klikacie", kód je v jednom súbore aby bol ľahšie k
+                dispozícii na skúmanie.</p>
+            <div class="pic"><a href="http://danielgago.sk/testy/grid_test_1.html" target="_blank"><img src="grid1.jpg"
+                        alt="grid1"></a>
+                <a href="http://danielgago.sk/testy/grid_test_fill.html" target="_blank"><img src="grid2.jpg"
+                        alt="grid1"></a>
+            </div>
+        </section>
+
+        &copy; Daniel Gago (2021)
+
+    </div>
+
+
+    <!--
+        <section>
+        <h3></h3>
+        <p class="text">
+
+        </p>
+        <p class="text">Klikni na jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
+        <button class="active" onclick="displayBlock()">display: block; (základné zobrazenie)</button>
+        <button onclick="displayFlex()">display: flex; (flexibilné zobrazenie)</button>
+    </section>
+
+    <div class="line"></div>
+
+-->
+
+</body>
+
+</html>
