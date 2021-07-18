@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="sk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flex-box - zoznám sa s jeho základom </title>
+    <meta name="description"
+        content="flex-box - ukážka základného spôsobu fungovania systému flex pre tvorbu webového obsahu">
+    <meta name="keywords" content="HTML,CSS, flex">
+    <meta name="author" content="Daniel Gago">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-size: 1.063rem;
+        }
+
+        .width {
+            /*  šírka celého projektu*/
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 3% 3%;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        h2,
+        h3 {
+            /* nadpisy - serif písmo */
+            font-family: "Times New Roman", Times, serif;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        h2 {
+            /* hlavný nadpis */
+            padding-top: 1rem;
+            padding-bottom: 2rem;
+        }
+
+        h3 {
+            padding-bottom: 1rem;
+        }
+
+        .line {
+            /* oddeľovacia čiara */
+            border-bottom: 1px solid #272727;
+            margin: 1.5rem 0;
+            height: 1px;
+        }
+
+        .text {
+            /* bloky textu */
+            padding: 0 0 15px 0;
+            line-height: 1.5;
+            max-width: 70ch;
+            color: rgb(48, 48, 48);
+        }
+
+        a {
+            /* všetky odkazy vo farbe */
+            color: #ff5010;
+        }
+
+        button {
+            /* dizajn "tlačidiel" pre výber funkcie */
+            background-color: rgb(226, 226, 226);
+            font-size: 1em;
+            font-weight: 500;
+            letter-spacing: 1px;
+            padding: 5px 10px;
+            margin: 10px 0;
+            border: 1px solid #ff652f;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .active {
+            /* "aktívne" tlačidlá */
+            /*background-color: rgb(164, 253, 142);*/
+            background-color: #ffa788;
+        }
+
+
+        .fb_container {
+            /* obaľovací flex kontajner pre bloky */
+            background-color: #08946b;
+            padding: 1%;
+            position: relative;
+            border: 3px solid #272727;
+            margin-top: 0.55rem;
+        }
+
+        .flex {
+            /* priadaj mu vlastnosť display: flex; */
+            display: flex;
+        }
+
+        .wrap {
+            /* pridaj mu vlastnosť flex-wrap:wrap; */
+            height: 400px;
+            flex-wrap: wrap;
+        }
+
+        .fb_item {
+            /* základný oranžový blok na ukážky */
+            width: 15%;
+            background-color: #ff652f;
+            border: 3px solid #272727;
+            color: #fff;
+            font-size: 2em;
+            padding: 10px;
+            margin: 1%;
+            position: relative;
+        }
+
+        .font {
+            /* občas treba na tie bloky menšie písmo... */
+            font-size: 1rem;
+        }
+
+        .item1 {
+            /* 1.blok - len definícia výšky aby sa dali demonštrovať daktoré funkcie */
+            min-height: 65px;
+        }
+
+        .item2 {
+            /* 2. blok*/
+            min-height: 100px;
+        }
+
+        .item3 {
+            /* 3. blok */
+            min-height: 200px;
+        }
+
+        .lineX {
+            /* x ová os */
+            width: 100%;
+            background-color: yellow;
+            position: absolute;
+            height: 3px;
+            top: 50%;
+            left: 0px;
+        }
+
+        .lineY {
+            /* y ová os */
+            width: 3px;
+            background-color: yellow;
+            position: absolute;
+            height: 100%;
+            top: 0%;
+            left: 50%;
+        }
+
+        .number {
+            /* číslo kontajnera */
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+        }
+
+        .logo {
+            width: 20px;
+            display: block;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="width">
+
+        <h2>Grafický interaktívny tutoriál - ako funguje "flex"</h2>
+
+        <div id="fonts">
+            <script src="/js_font_size_menu.js"></script>
+        </div>
+        <br>
+        <p class="text" style="text-align: center;">Tento "interaktívny návod" je inšpirovaný skvelým videom
+            od <a href="https://www.youtube.com/c/codeSTACKr/videos" target="_blank"> "codeSTACKr"</a> -
+            <a href="https://www.youtube.com/watch?v=qqDH0T6K5gY" target="_blank">Learn CSS FLEXBOX in 20 Minutes</a>
+            kde je toho ešte o kus viac (v angličtine) a odporúčam si ten návod pozrieť. Mimochodom podobný návod má
+            tento autor aj pre "grid". Tiež odporúčam pozrieť ak vás grid zaujíma.
+        </p>
+        <br>
+        <p class="text">Nie je to úplne plnohodnotný a komplexný sprievodca ako funguje flex, ale je tu veľmi názorne
+            ukázaný základ jeho fungovania.
+            To hlavné na pochopenie fungovania, prípadne možností kde to využiť. A môže to byť taká rýchla interaktívna
+            nápoveda.
+            K daktorej kapitole je občas doplnený odkaz ktorý vás presmeruje na MDN Web Docs kde je k tomo ďalšia kopa
+            (detailnejších) informácií...
+            Celý kód je v jednom súbore (aj CSS, aj JS scripty v jednom html) aby bolo možné si ho jednoducho
+            prekopírovať do svojho editora a ďalej s
+            ním pracovať a skúšať si prípadne svoje úpravy v kóde. Myslím že pre začiatočníkov to bude fajn
+            pomôcka...<br>
+            Dobrý prehľad k tomu je aj tu: <a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/"
+                target="_blank">css-tricks.com</a> a samozrejme nemôže chýbať
+            skvelá pomôcka na test že či už ste to pochopili - <a href="https://flexboxfroggy.com/"
+                target="_blank">flexfroggy</a>.
+
+        </p>
+        <p class="text"><strong>Majte na pamäti že správny výsledok layoutu stránky získate až správnou kombináciou tu
+                predstavených jednotlivých možností!!!</strong></p>
+
+        <div class="line"></div>
+        <h3>Čo je flex a na čo je to dobré pri tvorbe webu</h3>
+        <p class="text">
+            Flex slúži na jednoduchšie pozíciovanie viacerých blokov v kontajneri, alebo na jednoduchšie pozíciovanie
+            obsahu v samotnom bloku na stránke. Jeho silná stránka je upratovanie elementov vodorovne vedľa seba
+            umiestnených na stránke. Ale samozrejme aj zvislo, podľa nastavení "direction", takže presnejšie povedané -
+            v jednej línii.
+            Myslím že z príkladov tu ďalej bude všetko jasné.
+            Veľká pomoc flex-u je aj v centrovaní napríklad, a to ako vodorovnom (čo zvláda aj bežné CSS) tak aj zvislom
+            (to je komplikovanejšie pre CSS), ale aj v ladení rozostupov medzi elementami v bloku - robí to automaticky
+            a elegantne. Pár príkazov a všetko je razom nastavené. Zrovna tak aj responzivita sa
+            ľahko rieši. A dokáže aj preusporiadať radenie elementov, čo by bolo inak naozaj dosť komplikované bez
+            flex-u. Aj na to tu je ukážka.
+        </p>
+
+        <div class="line"></div>
+        <section id="fb">
+            <h3>Zobrazme si 3 základné bloky rozdielnej výšky s ktorými budeme najčastejšie ďalej
+                pracovať...</h3>
+            <p class="text">Jednoducho sa zobrazia pod seba, lebo sú to blokové elementy, a na ľavý kraj stránky...</p>
+            <p class="text">Aby fungoval flex
+                tak samozrejme musia byť v kontajneri ktorý ich obaľuje...
+                A stačí jednoduchý príkaz <strong>"display: flex;"</strong> (pre kontajner ktorý ich obaľuje) a výsledok
+                je
+                úplne iný...<br>
+                Zobrazia sa vedľa seba a s výškou rovnakou ako má najväčší blok. Rozhodne to hneď vyzerá "inak" na
+                stránke. <br>
+                (podmienka tohoto roztiahnutia je aby nemali výšku definovanú "na pevno"... V tomto prípade majú iba
+                min-height pre
+                rozdielnosť zobrazenia, ak nebudú mať definovanú žiadnu tak všetky dostanú rovnakú - najmenšiu potrebnú)
+            </p>
+            <p class="text">Klikni na jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
+            <button class="active" onclick="fb(0)">display: block; (základné zobrazenie)</button>
+            <button onclick="fb(1)">display: flex; (flexibilné zobrazenie)</button>
+            <div id="blockflex" class="fb_container">
+                <div class="fb_item item1">1</div>
+                <div class="fb_item item2">2</div>
+                <div class="fb_item item3">3</div>
+            </div>
+            <div class="line"></div>
+
+            <script>
+                function fb(p) {
+                    var element = document.getElementById("blockflex");
+                    var buttons = document.querySelectorAll("#fb>button");
+                    buttons.forEach(element => {
+                        element.classList.remove("active");
+                    });
+                    buttons[p].classList.add("active");
+                    switch (p) {
+                        case (0):
+                            element.classList.remove("flex");
+                            break;
+                        case (1):
+                            element.classList.add("flex");
+                            break;
+                    }
+                }
+            </script>
+
+        </section>
+
+        <section id="dd">
+            <h3>Základné zoradenie blokov</h3>
+            <p class="text">Ale samozrejme flex dokáže fungovať aj v zvislom rozložení ak treba, a nie len to.
+                Dokonca môže byť "zoradenie" tých blokov aj v opačnom poradí. <br>
+                Ide to pomocou príkazu <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/flex-direction">
+                    <strong>"flex-direction: parameter;"</strong></a> <br>Tu sú na to príklady:
+            </p>
+            <p class="text">Klikni na jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
+            <button class="active" onclick="dd(0)">flex-direction: row; (základné zobrazenie - vedľa
+                seba)</button> <br>
+            <button onclick="dd(1)">flex-direction: row-reverse; (vedľa seba - opačné radenie)</button>
+            <br>
+            <button onclick="dd(2)">flex-direction: column; (pod seba)</button> <br>
+            <button onclick="dd(3)">flex-direction: column-reverse; (pod seba - opačné radenie)</button>
+            <br>
+            <div id="fd" class="fb_container flex">
+                <div class="fb_item item1">1</div>
+                <div class="fb_item item2">2</div>
+                <div class="fb_item item3">3</div>
+            </div>
+            <div class="line"></div>
+
+            <script>
+                function dd(p) {
+                    var element = document.getElementById("fd");
+                    var buttons = document.querySelectorAll("#dd>button");
+                    buttons.forEach(element => {
+                        element.classList.remove("active");
+                    });
+                    buttons[p].classList.add("active");
+                    switch (p) {
+                        case (0):
+                            element.setAttribute("style", "flex-direction: row;");
+                            break;
+                        case (1):
+                            element.setAttribute("style", "flex-direction: row-reverse;");
+                            break;
+                        case (2):
+                            element.setAttribute("style", "flex-direction: column;");
+                            break;
+                        case (3):
+                            element.setAttribute("style", "flex-direction: column-reverse;");
+                            break;
+                    }
+                }
+            </script>
+
+        </section>
+
+        <section id="fw">
+            <h3>Správanie sa blokov v kontajneri</h3>
+            <p class="text">Ak tých blokov je viac, tak sa nastavuje aj to ako sa majú správať ak
+                "nevojdú" do kontajnera (napríklad pri minimálnych šírkach v pixeloch, či v percentách,
+                v podstate sa hneď vyrieši čiastočne
+                responzivita webu...). Na to slúži príkaz
+                <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/flex-wrap" target="_blank"><strong>flex-wrap:
+                        parameter;</strong></a>.
+                <br>V základe sa natlačia tie bloky
+                za každú cenu vedľa seba,
+                čo ale môže byť v praxi riziko, a teda nežiadúce. Ako vidno snažia sa byť proporčne široké, ale keď sa
+                pozrieme na percentá šírky ktorú majú dosahovať, tak to teda "nepasuje". Napraví sa to práve týmto
+                príkazom.
+                Elementy dostanú potom šírku v % (alebo iných jednotkách) presne ako majú definovanú. <br>
+                Využitie to má napríklad pri tvorbe galérie - viac malých obrázkov rovnakej šírky.
+                Zadáte si že majú mať šírku dajme tomu ako tu 23% (+ 1 a 1% sú margin, takže je to brané ako 4x25% v
+                tomto prípade,
+                aj minimálne dajme tomu dajaké pixely aby sa to moc nezcvrkávalo ten obsah sa oplatia nastaviť), vhodne
+                to
+                nastavíte príkazmi s medzerami okolo a už ich len
+                hádžete za sebou, flex to "uprace" presne tak ako je vidno <strong>pri poslednej voľbe</strong>, kde
+                <strong> sa
+                    po zmene ešte centrujú pomocou príkazu justify-content: space-between;</strong> (je o ňom hneď
+                ďalšia kapitola). Blok s 80 % dostal ešte príkaz margin-left a margin-right "auto", aby sa
+                nacentroval.<br>
+                Pre lepšiu názornosť správania sa blokov po tomto príkaze majú tie hore aj rozdielnu šírku, a tie dolu
+                rovnakú (23%). <br>
+                <strong>POZOR - toto je časť stránky ktorá na daktorých mobiloch s extra nízkym rozlíšením (na výšku)
+                    nebude možno zobrazená korektne. Ale na bežných funguje už korektne.
+                </strong><br>
+                <br>
+                Klikni pre jednotlivé
+                možnosti aby bolo vidno ako to v praxi funguje: <br>
+            </p>
+            <button class="active" onclick="fw(0)">flex-wrap: nowrap; (základné zobrazenie)</button>
+            <button onclick="fw(1)">flex-wrap: wrap; (rozdelí bloky)</button>
+            <button onclick="fw(2)">flex-wrap: wrap-reverse; (rozdelí bloky v opačnom poradí)</button>
+            <button onclick="fw(3)">flex-wrap: wrap; + justify-content: space-between; (rozdelí bloky a "uprace
+                ich")</button>
+            <div id="wrap1" class="fb_container flex">
+                <div class="fb_item item1 font" style="width: 50%;">1 - 50 %</div>
+                <div class="fb_item item1 font" style="width: 40%;">2 - 40 %</div>
+                <div class="fb_item item1 font" style="width: 30%;">3 - 30 %</div>
+                <div class="fb_item item1 font" style="width: 30%;">4 - 30 %</div>
+                <div class="fb_item item1 font" style="width: 30%;">5 - 30 %</div>
+                <div class="fb_item item1 font" style="width: 80%;">6 - 80 %</div>
+            </div>
+            <br>
+            <div id="wrap2" class="fb_container flex">
+                <div class="fb_item item1 font" style="width: 23%;">1</div>
+                <div class="fb_item item1 font" style="width: 23%;">2</div>
+                <div class="fb_item item1 font" style="width: 23%;">3</div>
+                <div class="fb_item item1 font" style="width: 23%;">4</div>
+                <div class="fb_item item1 font" style="width: 23%;">5</div>
+                <div class="fb_item item1 font" style="width: 23%;">6</div>
+                <div class="fb_item item1 font" style="width: 23%;">7</div>
+                <!-- pre nedostatok miesta na malých displayoch som tieto 2 posledné zrušil... -->
+                <!--<div class="fb_item item1 none" style="width: 23%; ">8</div>
+                <div class="fb_item item1 none" style="width: 23%; ">9</div>-->
+            </div>
+            <div class="line"></div>
+
+            <script>
+                function fw(p) {
+                    var element1 = document.getElementById("wrap1");
+                    var element2 = document.getElementById("wrap2");
+                    var elementDiv = document.querySelectorAll("#wrap1>div");
+                    var buttons = document.querySelectorAll("#fw>button");
+                    buttons.forEach(element => {
+                        element.classList.remove("active");
+                    });
+                    buttons[p].classList.add("active");
+                    switch (p) {
+                        case (0):
+                            element1.setAttribute("style", "flex-wrap: nowrap;");
+                            element2.setAttribute("style", "flex-wrap: nowrap;");
+                            elementDiv[5].setAttribute("style", "width: 80%;");
+                            break;
+                        case (1):
+                            element1.setAttribute("style", "flex-wrap: wrap;");
+                            element2.setAttribute("style", "flex-wrap: wrap;");
+                            elementDiv[5].setAttribute("style", "width: 80%;");
+                            break;
+                        case (2):
+                            element1.setAttribute("style", "flex-wrap: wrap-reverse;");
+                            element2.setAttribute("style", "flex-wrap: wrap-reverse;");
+                            elementDiv[5].setAttribute("style", "width: 80%;");
+                            break;
+                        case (3):
+                            element1.setAttribute("style", "flex-wrap: wrap; justify-content: space-between;");
+                            element2.setAttribute("style", "flex-wrap: wrap; justify-content: space-between;");
+                            elementDiv[5].setAttribute("style", "width: 80%; margin-left: auto; margin-right: auto;");
+                            break;
+                    }
+                }
+            </script>
+
+        </section>
+
+        <section id="jc">
+            <h3>Základné usporiadanie blokov na šírku</h3>
+            <p class="text">A môže začať kúzlenie s týmito blokmi, respektíve s ich rozložením v kontajneri...<br>
+                Pre názornosť výsledku sú v hlavnom bloku zakreslené osi x a y ktoré sú (dúfam) presne v strede bloku.
+                <br>
+                Posúvanie blokov vodorovne (usporiadanie na šírku) - to má na starosti príkaz
+                <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content" target="_blank"><strong>
+                        justify-content: parameter;</strong></a>. <br>
+                (pre výsledok klikni na požadovaný príkaz a rozloženie sa zmení) <br>
+            </p>
+            <button class="active" onclick="jc(0)">justify-content: flex-start; (základné zobrazenie - všetko je
+                natlačené na štart -
+                tu vľavo)</button> <br>
+            <button onclick="jc(1)">justify-content: flex-end; (všetko je natlačené na koniec - tu doprava)</button>
+            <br>
+            <button onclick="jc(2)">justify-content: center; (všetko je stiahnuté do stredu)</button> <br>
+            <button onclick="jc(3)">justify-content: space-between; (medzery medzi blokmi, ale krajné sú na
+                kraji)</button> <br>
+            <button onclick="jc(4)">justify-content: space-arround; (medzery medzi všetkými blokmi)</button> <br>
+            <button onclick="jc(5)">justify-content: space-evenly; (medzery medzi všetkými blokmi
+                "rovnomerne")</button> <br>
+            <div id="j-c" class="fb_container flex">
+                <div class="fb_item item1">1</div>
+                <div class="fb_item item2">2</div>
+                <div class="fb_item item3">3</div>
+                <div class="lineX">X</div>
+                <div class="lineY">&nbsp;Y</div>
+            </div>
+            <div class="line"></div>
+
+            <script>
+                function jc(p) {
+                    var element = document.getElementById("j-c");
+                    var buttons = document.querySelectorAll("#jc>button");
+                    buttons.forEach(element => {
+                        element.classList.remove("active");
+                    });
+                    buttons[p].classList.add("active");
+                    switch (p) {
+                        case (0):
+                            element.setAttribute("style", "justify-content: flex-start;");
+                            break;
+                        case (1):
+                            element.setAttribute("style", "justify-content: flex-end;");
+                            break;
+                        case (2):
+                            element.setAttribute("style", "justify-content: center;");
+                            break;
+                        case (3):
+                            element.setAttribute("style", "justify-content: space-between;");
+                            break;
+                        case (4):
+                            element.setAttribute("style", "justify-content: space-around;");
+                            break;
+                        case (5):
+                            element.setAttribute("style", "justify-content: space-evenly;");
+                            break;
+                    }
+                }
+            </script>
+
+        </section>
+
+        <section id="bw">
+            <h3>Ako nastaviť potrebné rozdielne šírky blokov</h3>
+            <p class="text">Teraz sa pozrieme na to ako sa dá rozložiť obsah troch blokov na šírku ak
+                potrebujeme ich rozdielnu šírku. To treba definovať priamo vo vlastnostiach tých blokov už.
+                Dám sem zopár príkladov ako sa to zobrazí... Možnosti použitia jednotiek sú podobné ako pri
+                definovaní širky elementu napríklad. (<strong>pixel , %</strong>, atď., ale aj iné, špecifické
+                práve pre flex) Aj tie vlastnosti pri
+                responzivite sú potom také podobné (pixely sú stabilne široké a podobne - treba si to tu skúsiť
+                porozťahovať).
+                Tu ešte pozor
+                na kombináciu s ostatnými príkazmi, hlavne wrap, nowrap, space medzi blokmi a podobne.
+                Toto zobrazenie tu platí pre nowrap a žiadne riešenie space príkazom.<br>
+                Pozor na hodnotu auto (v tomto prípade), ona urobí iba minimálne potrebnú šírku (pre obsah) elementu! Ak
+                chceme
+                využit zostávajúce
+                miesto naplno tak (v tomto prípade) treba použiť (napríklad) príkaz <strong>flex-grow:1;</strong>, oba
+                príklady tu sú zobrazené.<br>
+                Na pomerové delenie blokov ide použiť aj špecifický flex príkaz: <strong>flex: číselná hodnota;</strong>
+                , príklad
+                na to je úplne posledný.
+            </p>
+            <button class="active" onclick="width(0)">15% 15% 15% (tri pevne definované šírky)</button> <br>
+            <p>(základné zobrazenie - takže sú tie 15% bloky pekne vedľa seba a vľavo)</p>
+            <button onclick="width(1)">25% 50% 25% ("klasický" layout stránky pomocou %)</button> <br>
+            <button onclick="width(2)">100px grow1 grow1 ("pevný" kraj pre menu a ostatné rovnomerne rozdeľ)</button>
+            <br>
+            <button onclick="width(3)">100px auto 70px (pevné kraje, zbytok je minimálna potrebná šírka) </button> <br>
+            <button onclick="width(4)">100px grow1 70px (pevné kraje, zbytok "naplno" využi) </button> <br>
+            <button onclick="width(5)">flex:1 flex:3 flex:1 (flex umožňuje v podstate "pomerové" delenie - tu 1/3/1)
+            </button>
+            <div class="fb_container flex">
+                <div id="it1" class="fb_item item1">1</div>
+                <div id="it2" class="fb_item item2">2</div>
+                <div id="it3" class="fb_item item3">3</div>
+            </div>
+            <div class="line"></div>
+
+            <script>
+                function width(p) {
+                    var element1 = document.getElementById("it1");
+                    var element2 = document.getElementById("it2");
+                    var element3 = document.getElementById("it3");
+                    var buttons = document.querySelectorAll("#bw>button");
+                    buttons.forEach(element => {
+                        element.classList.remove("active");
+                    });
+                    buttons[p].classList.add("active");
+                    switch (p) {
+                        case (0):
+                            element1.setAttribute("style", "width: 15%;");
+                            element2.setAttribute("style", "width: 15%;");
+                            element3.setAttribute("style", "width: 15%;");
+                            break;
+                        case (1):
+                            element1.setAttribute("style", "width: 25%;");
+                            element2.setAttribute("style", "width: 50%;");
+                            element3.setAttribute("style", "width: 25%;");
+                            break;
+                        case (2):
+                            element1.setAttribute("style", "width: 100px;");
+                            element2.setAttribute("style", "flex-grow:1;");
+                            element3.setAttribute("style", "flex-grow:1;");
+                            break;
+                        case (3):
+                            element1.setAttribute("style", "width: 100px;");
+                            element2.setAttribute("style", "width: auto;");
+                            element3.setAttribute("style", "width: 70px;");
+                            break;
+                        case (4):
+                            element1.setAttribute("style", "width: 100px;");
+                            element2.setAttribute("style", "flex-grow:1;");
+                            element3.setAttribute("style", "width: 70px;");
+                            break;
+                        case (5):
+                            element1.setAttribute("style", "flex:1;");
+                            element2.setAttribute("style", "flex:3;");
+                            element3.setAttribute("style", "flex:1;");
+                            break;
+                    }
+                }
+            </script>
+
+        </section>
+
+        <section id="ai">
+            <h3>Základné usporiadanie blokov na výšku</h3>
+            <p class="text">A ďalej tu máme usporiadanie blokov zvislo (na výšku) - to má na starosti príkaz
+                <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/align-items" target="_blank">
+                    <strong>align-items: parameter;</strong></a>.<br>
+                <strong>POZOR - toto je iba centrovanie vzhľadom k ostatným blokom - výšku určuje (v tomto prípade)
+                    najvyšší blok.</strong>
+                Ešte máme iné zvislé centrovanie - celého obsahu, to nasleduje hneď po tomto diely.
+                Toto je veľmi žiadúce napríklad ak máte vedľa seba viaceré malé bloky textu s rozdielnou veľkosťou a
+                teda aj výškou a potrebujete
+                ich dostať "do dajakej línie" aby to lepšie vyzeralo... <br>
+                (pre výsledok klikni na požadovaný príkaz a rozloženie sa zmení) <br>
+            </p>
+            <button class="active" onclick="ai(0)">align-items: stretch; (základné zobrazenie - všetko je roztiahnuté na
+                celú
+                výšku)</button> <br>
+            <button onclick="ai(1)">align-items: flex-start; (všetko je posunuté hore - začína to na štarte)</button>
+            <br>
+            <button onclick="ai(2)">align-items: flex-end; (všetko je posunuté dolu - na koniec)</button> <br>
+            <button onclick="ai(3)">align-items: center; (všetko je na stred)</button> <br>
+            <div id="a-i" class="fb_container flex">
+                <div class="fb_item item1" style="width: 33.3%">1</div>
+                <div class="fb_item item2" style="width: 33.3%">2</div>
+                <div class="fb_item item3" style="width: 33.3%">3</div>
+                <div class="lineX">X</div>
+                <div class="lineY">&nbsp;Y</div>
+            </div>
+            <div class="line"></div>
+
+            <script>
+                function ai(p) {
+                    var element = document.getElementById("a-i");
+                    var buttons = document.querySelectorAll("#ai>button");
+                    buttons.forEach(element => {
+                        element.classList.remove("active");
+                    });
+                    buttons[p].classList.add("active");
+                    switch (p) {
+                        case (0):
+                            element.setAttribute("style", "align-items: stretch;");
+                            break;
+                        case (1):
+                            element.setAttribute("style", "align-items: flex-start;");
+                            break;
+                        case (2):
+                            element.setAttribute("style", "align-items: flex-end;");
+                            break;
+                        case (3):
+                            element.setAttribute("style", "align-items: center;");
+                            break;
+                    }
+                }
+            </script>
+
+        </section>
+
+        <section id="ac">
+            <h3>Usporiadanie obsahu kontajnera na výšku</h3>
+            <p class="text">Ďalšie pozíciovanie blokov zvislo (na výšku) - toto má na starosti príkaz
+                <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/align-content" target="_blank">
+                    <strong>align-content: parameter;</strong></a>.<br>
+                A ako názov príkazu napovedá - <strong>toto je ladenie celého obsahu ku výške bloku</strong>. Na jeho
+                fungovanie musí byť definovaná dajaká (väčšia) výška kontajnera. A má v podstate podobné možnosti
+                ako mal príkaz "justify-content". Nie je tu úplne všetko, ešte by sa dalo napríklad toto:<br>
+                align-content: baseline;
+                align-content: first baseline;
+                align-content: last baseline;
+                <br>
+                (pre výsledok klikni na požadovaný príkaz a rozloženie sa zmení) <br>
+            </p>
+            <button class="active" onclick="ac(0)">align-content: normal; (základné zobrazenie)</button> <br>
+            <button onclick="ac(1)">align-content: flex-start; (všetko je natlačené hore - na štart)</button>
+            <button onclick="ac(2)">align-content: flex-end; (všetko je natlačené dolu - na koniec)</button>
+            <button onclick="ac(3)">align-content: center; (všetko je stiahnuté do stredu)</button>
+            <button onclick="ac(4)">align-content: space-between; (medzery medzi blokmi, ale krajné sú na
+                kraji)</button> <br>
+            <button onclick="ac(5)">align-content: space-around; (medzery medzi všetkými blokmi)</button>
+            <button onclick="ac(6)">align-content: space-evenly; (medzery medzi všetkými blokmi "rovnomerne")</button>
+            <br>
+            <div id="a-c" class="fb_container flex wrap">
+                <div class="fb_item" style="width: 48%; height: 65px;">1 - 50%</div>
+                <div class="fb_item" style="width: 48%; height: 90px;">2 - 50%</div>
+                <div class="fb_item " style="width: 98%; height: 100px;">3 - 100%</div>
+                <div class="lineX">X</div>
+            </div>
+            <div class="line"></div>
+            <script>
+                function ac(p) {
+                    var element = document.getElementById("a-c");
+                    var buttons = document.querySelectorAll("#ac>button");
+                    buttons.forEach(element => {
+                        element.classList.remove("active");
+                    });
+                    buttons[p].classList.add("active");
+                    switch (p) {
+                        case (0):
+                            element.setAttribute("style", "align-content: normal;");
+                            break;
+                        case (1):
+                            element.setAttribute("style", "align-content: flex-start;");
+                            break;
+                        case (2):
+                            element.setAttribute("style", "align-content: flex-end;");
+                            break;
+                        case (3):
+                            element.setAttribute("style", "align-content: center;");
+                            break;
+                        case (4):
+                            element.setAttribute("style", "align-content: space-between;");
+                            break;
+                        case (5):
+                            element.setAttribute("style", "align-content: space-around;");
+                            break;
+                        case (6):
+                            element.setAttribute("style", "align-content: space-evenly;");
+                            break;
+                    }
+                }
+            </script>
+
+        </section>
+
+        <section id="as">
+            <h3>Ladíme jednotlivé bloky na výšku</h3>
+            <p class="text">A ďalej tu máme pozíciovanie <strong>jednotlivých!</strong> blokov zvislo (na
+                výšku)
+                - to má na starosti príkaz
+                <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/align-self" target="_blank">
+                    <strong>align-self: parameter;</strong></a>.<br>
+                Príkaz je v podstate totožný s príkazom "align-items", akurát ovláda iba konkrétny jeden blok, a aj sa
+                zadáva do toho
+                konkrétneho bloku samozrejme, nie do kontajnera. Dám sem iba dajaké príklady čo to dokáže...<br>
+                (pre výsledok klikni na požadovaný príkaz a rozloženie sa zmení) <br>
+            </p>
+            <button class="active" onclick="as(0)">align-self: stretch; (základ - všetky rovnako "natiahnuté")</button>
+            <br>
+            <button onclick="as(1)">align-self: center + align-self: flex-end; (stred / dolu / stretch)</button> <br>
+            <button onclick="as(2)">align-self: flex-start; (iba na strednom bloku!)</button> <br>
+            <div id="a-s" class="fb_container flex">
+                <div id="as1" class="fb_item item1" style="width: 33.3%">1</div>
+                <div id="as2" class="fb_item item2" style="width: 33.3%">2</div>
+                <div id="as3" class="fb_item item3" style="width: 33.3%">3</div>
+                <div class="lineX">X</div>
+                <div class="lineY">&nbsp;Y</div>
+            </div>
+            <div class="line"></div>
+
+            <script>
+                function as(p) {
+                    var element1 = document.getElementById("as1");
+                    var element2 = document.getElementById("as2");
+                    var element3 = document.getElementById("as3");
+                    var buttons = document.querySelectorAll("#as>button");
+                    buttons.forEach(element => {
+                        element.classList.remove("active");
+                    });
+                    buttons[p].classList.add("active");
+                    switch (p) {
+                        case (0):
+                            element1.setAttribute("style", "width: 33.3%; align-self: stretch;");
+                            element2.setAttribute("style", "width: 33.3%; align-self: stretch;");
+                            element3.setAttribute("style", "width: 33.3%; align-self: stretch;");
+                            break;
+                        case (1):
+                            element1.setAttribute("style", "width: 33.3%; align-self: center;");
+                            element2.setAttribute("style", "width: 33.3%; align-self: flex-end;");
+                            element3.setAttribute("style", "width: 33.3%; align-self: stretch;");
+                            break;
+                        case (2):
+                            element1.setAttribute("style", "width: 33.3%; align-self: stretch;");
+                            element2.setAttribute("style", "width: 33.3%; align-self: flex-start;");
+                            element3.setAttribute("style", "width: 33.3%; align-self: stretch;");
+                            break;
+                    }
+                }
+            </script>
+
+        </section>
+
+        <section id="ob">
+            <h3>Responzívny web pomocou flex - ukážka</h3>
+            <p class="text">Ešte sa hodí vedieť že máte aj možnosť preusporiadať postupnosť týchto blokov
+                - to má na starosti príkaz
+                <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/order" target="_blank">
+                    <strong>order: číslo;</strong></a>.<br>
+                V praxi sa to môže hodiť práve pri responzivite - na mobile iné usporiadanie ako na PC.
+                Ukážem tu na príklade.<br>
+                (Keďže mám aj margin 1% tak šírka každého elementu musí byť v kóde -2 percentá!)<br>
+                (pre výsledok klikni na požadovaný príkaz a rozloženie sa zmení) <br>
+            </p>
+            <button class="active" onclick="order(0)">1 - klasický monitor (PC - 20% 60% 20%)</button> <br>
+            <button onclick="order(1)">2 - stredne veľké zariadenie (tablet - menu 40% + aside 60% spolu, main 100% pod
+                nimi)</button> <br>
+            <button onclick="order(2)">3 - malý display (mobil - všetko na celú šírku a pod sebou, ideálne aj text na
+                strede)</button> <br>
+            <div id="order" class="fb_container flex" style="flex-wrap: wrap;">
+                <div id="order1" class="fb_item item1 font" style="width: 18%;">Menu</div>
+                <div id="order2" class="fb_item item3 font" style="width: 58%;">Main</div>
+                <div id="order3" class="fb_item item1 font" style="width: 18%;">Aside</div>
+            </div>
+            <div class="line"></div>
+
+            <script>
+                function order(p) {
+                    var buttons = document.querySelectorAll("#ob>button");
+                    buttons.forEach(element => {
+                        element.classList.remove("active");
+                    });
+                    buttons[p].classList.add("active");
+                    switch (p) {
+                        case (0):
+                            var element = document.getElementById("order1");
+                            element.setAttribute("style", "width: 18%; order:1;");
+                            var element = document.getElementById("order2");
+                            element.setAttribute("style", "width: 58%; order:2;");
+                            var element = document.getElementById("order3");
+                            element.setAttribute("style", "width: 18%; order:3;");
+                            var element = document.getElementById("order");
+                            element.setAttribute("style", "max-width: 100%; flex-wrap: wrap;");
+                            break;
+                        case (1):
+                            var element = document.getElementById("order1");
+                            element.setAttribute("style", "width: 38%; order:1;");
+                            var element = document.getElementById("order2");
+                            element.setAttribute("style", "width: 98%; order:3; align-self: flex-end;");
+                            var element = document.getElementById("order3");
+                            element.setAttribute("style", "width: 58%; order:2;");
+                            var element = document.getElementById("order");
+                            element.setAttribute("style", "max-width: 768px; flex-wrap: wrap;");
+                            break;
+                        case (2):
+                            var element = document.getElementById("order1");
+                            element.setAttribute("style", "width:98%; order:1; text-align: center;");
+                            var element = document.getElementById("order2");
+                            element.setAttribute("style", "width: 98%; order:2; text-align: center;");
+                            var element = document.getElementById("order3");
+                            element.setAttribute("style", "width: 98%; order:3; text-align: center;");
+                            var element = document.getElementById("order");
+                            element.setAttribute("style", "max-width: 480px; flex-wrap: wrap;");
+                            break;
+                    }
+                }
+            </script>
+
+        </section>
+
+        <section>
+            <h3>Ladíme vnútorný obsah blokov</h3>
+            <p class="text">A ešte posledná ukážka, ako upratať obsah v tých blokoch... No ide to taktiež pomocou
+                flex-u samozrejme. Aj tie <strong>blokové elementy dostanú vlastnosť display:flex;</strong> a s obsahom
+                v nich sa potom
+                dá narábať tak isto ako sme narábali s blokmi v kontajneri... <br>
+                <strong>Ale POZOR - jednotlivé elementy musia občas byť vo vlastných blokoch - divoch, podľa toho ako s
+                    nimi potrebujete manipulovať!
+                    A ak to vyžaduje dizajn tak sa treba pohrať aj s nastavením šírky tých elementov.</strong> <br>
+                Príkazy na to sú: <strong>justify-content: parameter;</strong> (posun vodorovne) a <strong>align-items:
+                    parameter;</strong> (posun zvislo). Parametre
+                sú rovnaké ako platili pri blokoch. <br>
+                Tu nechám na ukážku len príklady priamo v blokoch ako to v praxi bude vyzerať, myslím že je to jasné.
+                Možností kombinovania tých príkazov,
+                blokov v blokoch a podobne sú neskutočné... <br>
+                <br>
+                <strong>1.</strong> blok dostal príkazy - display:flex; justify-content: center; align-items:
+                flex-start; <br>
+                (a celý obsah je v jednom kontajneri (<span style="background-color:yellow">žlté ohraničenie</span>),
+                takže celý je pri sebe a hore v strede, ale pozor na jeho celkovú šírku,
+                aj tú treba "nastaviť" ak má byť kvôli dizajnu dajaká konkrétna, inak bude 100%...)<br>
+                <strong>2.</strong> blok dostal príkazy - display:flex; justify-content: flex-end; align-items:
+                flex-end; <br>
+                (a celý obsah je v jednom kontajneri, takže celý je pri sebe a vpravo dolu)<br>
+                <strong>3.</strong> blok dostal príkazy - display:flex; justify-content: center; align-items: center;
+                <br>
+                (a celý obsah je v jednom kontajneri, takže celý je pri sebe a v strede)<br>
+                A teraz trochu zložitejšie upratanie:<br>
+                <strong>4.</strong> obsah už nie je v jednom div kontajneri, takže tie jednotlivé blokové elementy treba
+                upratať inak...
+                Je treba viaceré príkazy. display: flex;
+                flex-direction: column; (usporiadaj obsah pod seba - POZOR - menia sa osi x a y pre pozíciovanie!!!),
+                takže potom align-items: center;
+                (obsah na stred po osi x)
+                a justify-content: space-evenly; (roztiahni ho na výšku rovnomerne) <br>
+                <strong>5.</strong> obdobne ako pri 4, len inak upratané - display: flex;
+                flex-direction: column; align-items: flex-end; (obsah na koniec - vpravo)
+                a justify-content: space-between; (roztiahni ho na výšku čo najviac od seba)
+            </p>
+            <div class="fb_container flex wrap">
+                <div class="fb_item item1 font"
+                    style="width: 48%; height: 150px; display: flex; justify-content: center; align-items: flex-start;">
+                    <div class="number">1</div>
+                    <div style="padding: 2px;
+                    border: 2px solid greenyellow;">
+                        <h5 style="text-align: center;">Nadpis</h5>
+                        <img class="logo" src="logo_flex.jpg" alt="logo">
+                        <h6>Obsah bloku</h6>
+                    </div>
+                </div>
+                <div class="fb_item item2 font"
+                    style="width: 48%; height: 150px; display: flex; justify-content: flex-end; align-items: flex-end;">
+                    <div class="number">2</div>
+                    <div style="padding: 2px;
+                    border: 2px solid greenyellow;">
+                        <h5 style="text-align: center;">Nadpis</h5>
+                        <img class="logo" src="logo_flex.jpg" alt="logo">
+                        <h6>Obsah bloku</h6>
+                    </div>
+                </div>
+                <div class="fb_item font "
+                    style="width: 31.3%; height: 150px; display: flex; justify-content: center; align-items: center;">
+                    <div class="number">3</div>
+                    <div style="padding: 2px;
+                    border: 2px solid greenyellow;">
+                        <h5 style="text-align: center;">Nadpis</h5>
+                        <img class="logo" src="logo_flex.jpg" alt="logo">
+                        <h6>Obsah bloku</h6>
+                    </div>
+                </div>
+                <div class="fb_item font "
+                    style="width: 31.3%; height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly;">
+                    <div class="number">4</div>
+                    <h5 style="text-align: center;">Nadpis</h5>
+                    <img class="logo" src="logo_flex.jpg" alt="logo">
+                    <h6>Obsah bloku</h6>
+                </div>
+                <div class="fb_item font "
+                    style="width: 31.3%; height: 150px; display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between;">
+                    <div class="number">5</div>
+                    <h5 style="text-align: center;">Nadpis</h5>
+                    <img class="logo" src="logo_flex.jpg" alt="logo">
+                    <h6>Obsah</h6>
+                </div>
+
+            </div>
+            <div class="line"></div>
+
+        </section>
+
+        <strong>No a či a hlavne ako to funguje v praxi som skúsil napríklad tu:
+            <a href="http://danielgago.sk/FlexBox_test.html" target="_blank">FlexBoxTest</a> </strong> <br>
+        Stránka je plne responzívna (mení sa aj poradie blokov), pohrajte sa s jej šírkou. Sú tam aj ukážky centrovania
+        obsahu v blokoch.
+        <br>
+        <div class="line"></div>
+        &copy; Daniel Gago (2021)
+
+    </div>
+
+
+</body>
+
+</html>
