@@ -10,234 +10,255 @@
         content="Grid - ukážka základného spôsobu fungovania a využitia grid (mriežky) pri tvorbe webového obsahu.">
     <meta name="keywords" content="HTML,CSS, grid">
     <meta name="author" content="Daniel Gago">
+
     <style>
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
-        body {
-            font-size: 1.063rem;
-        }
+body {
+  font-size: 1.063rem;
+}
 
-        .width {
-            /*  šírka celého projektu*/
-            max-width: 1050px;
-            margin: 0 auto;
-            padding: 3% 3%;
-            font-family: Arial, Helvetica, sans-serif;
-            letter-spacing: 0.5px;
-        }
+html {
+  /* efektnejšie skrolovanie po stránke */
+  /* tento príkaz musí byť pre html, pre body to nefunguje !! */
+  scroll-behavior: smooth;
+  /* naskroluj torchu vyššie o pol rem - lepšie to vyzerá... */
+  scroll-padding-top: 0.85rem;
+}
 
-        :root {
-            --color: rgb(1, 87, 145);
-            /* hlavný motív */
-            --bg_color: rgba(1, 87, 145, 0.5);
-            --item_color1: rgba(1, 87, 145, 0.5);
-            --item_color2: rgba(172, 255, 47, 0.5);
-            --item_color3: rgba(255, 172, 47, 0.5);
-            --space_color: gray;
-            --gray_color: rgb(226, 226, 226);
-        }
+.width {
+  /*  šírka celého projektu*/
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 3% 3%;
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: 0.5px;
+}
 
-        h2,
-        h3 {
-            /* nadpisy - serif písmo */
-            font-family: "Times New Roman", Times, serif;
-            letter-spacing: 0.5px;
-            text-align: center;
-        }
+:root {
+  --color: rgb(1, 87, 145);
+  /* hlavný motív */
+  --bg_color: rgba(1, 87, 145, 0.5);
+  --item_color1: rgba(1, 87, 145, 0.5);
+  --item_color2: rgba(172, 255, 47, 0.5);
+  --item_color3: rgba(255, 172, 47, 0.5);
+  --space_color: gray;
+  --gray_color: rgb(226, 226, 226);
+}
 
-        h2 {
-            /* hlavný nadpis */
-            padding-top: 1rem;
-            padding-bottom: 2rem;
-        }
+h2,
+h3 {
+  /* nadpisy - serif písmo */
+  font-family: "Times New Roman", Times, serif;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
 
-        h3 {
-            padding-bottom: 1rem;
-        }
+h2 {
+  /* hlavný nadpis */
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
 
-        .line {
-            /* oddeľovacia čiara */
-            border-bottom: 1px solid #272727;
-            margin: 1.5rem 0;
-            height: 1px;
-        }
+h3 {
+  padding-bottom: 1rem;
+}
 
-        .text {
-            /* bloky textu */
-            padding: 0 0 15px 0;
-            line-height: 1.5;
-            max-width: 70ch;
-            color: rgb(48, 48, 48);
-        }
+.line {
+  /* oddeľovacia čiara */
+  border-bottom: 1px solid #272727;
+  margin: 1.5rem 0;
+  height: 1px;
+}
 
-        a {
-            /* všetky odkazy vo farbe */
-            color: var(--color);
-        }
+.text {
+  /* bloky textu */
+  padding: 0 0 15px 0;
+  line-height: 1.5;
+  max-width: 70ch;
+  color: rgb(48, 48, 48);
+}
 
-        button {
-            /* dizajn "tlačidiel" pre výber funkcie */
-            background-color: var(--gray_color);
-            font-size: 1em;
-            font-weight: 500;
-            letter-spacing: 1px;
-            padding: 5px 10px;
-            margin: 10px 0;
-            border: 1px solid var(--color);
-            border-radius: 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            cursor: pointer;
-            max-width: 500px;
-        }
+a {
+  /* všetky odkazy vo farbe */
+  color: var(--color);
+}
 
-        .active {
-            /* "aktívne" tlačidlá */
-            /*background-color: rgb(164, 253, 142);*/
-            background-color: var(--bg_color);
-        }
+button {
+  /* dizajn "tlačidiel" pre výber funkcie */
+  background-color: var(--gray_color);
+  font-size: 1em;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 5px 10px;
+  margin: 10px 0;
+  border: 1px solid var(--color);
+  border-radius: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  max-width: 500px;
+}
 
-        /*section {
+.active {
+  /* "aktívne" tlačidlá */
+  /*background-color: rgb(164, 253, 142);*/
+  background-color: var(--bg_color);
+}
+
+/*section {
 
         }*/
 
-        .grid {
-            max-width: 60ch;
-            display: grid;
-            background-color: var(--space_color);
-            grid-template-columns: 1fr 1fr 3fr 1fr 1fr;
-            grid-template-rows: 5rem 5rem 5rem;
-            gap: 5px;
-            padding: 5px;
-            margin-top: 0.55rem;
-        }
+.grid {
+  max-width: 60ch;
+  display: grid;
+  background-color: var(--space_color);
+  grid-template-columns: 1fr 1fr 3fr 1fr 1fr;
+  grid-template-rows: 5rem 5rem 5rem;
+  gap: 5px;
+  padding: 5px;
+  margin-top: 0.55rem;
+}
 
-        .item {
-            background-color: var(--bg_color);
-        }
+.item {
+  background-color: var(--bg_color);
+}
 
-        .item1 {
-            background-color: var(--item_color2);
-            grid-column: 2/5;
-            grid-row: 2;
-            text-align: center;
-        }
+.item1 {
+  background-color: var(--item_color2);
+  grid-column: 2/5;
+  grid-row: 2;
+  text-align: center;
+}
 
-        .item2 {
-            background-color: var(--item_color3);
+.item2 {
+  background-color: var(--item_color3);
+}
 
-        }
+.area1 {
+  grid-template-rows: 3rem 8rem 2rem;
+  grid-template-areas:
+    "header header header header logo"
+    "main main main sidebar sidebar"
+    "footer footer . sidebar sidebar";
+}
 
+.area2 {
+  grid-template-rows: 3rem 8rem 2rem;
+  grid-template-areas:
+    "logo header header header sidebar"
+    "main main main main sidebar"
+    ". . footer .  sidebar";
+}
 
+.area3 {
+  grid-template-rows: 3rem 8rem 2rem;
+  grid-template-areas:
+    "logo header header header header"
+    "main main main sidebar sidebar"
+    "footer footer footer footer footer";
+}
 
-        .area1 {
-            grid-template-areas:
-                "header header header header logo"
-                "main main main sidebar sidebar"
-                "footer footer . sidebar sidebar";
-        }
+.res1 {
+  grid-template-columns: 1fr 1fr 2fr 2fr 1fr 1fr;
+  grid-template-rows: 5rem 5rem 5rem 2rem;
+  grid-template-areas:
+    "logo header header header header header"
+    "menu menu main main sidebar sidebar"
+    "menu menu main main sidebar sidebar"
+    "footer footer footer footer footer footer";
+}
 
-        .area2 {
-            grid-template-areas:
-                "logo header header header sidebar"
-                "main main main main sidebar"
-                ". . footer .  sidebar";
-        }
+.res2 {
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+  grid-template-rows: 5rem 5rem 5rem 5rem 5rem 2rem;
+  grid-template-areas:
+    "logo header header header"
+    "menu menu sidebar sidebar"
+    "menu menu sidebar sidebar"
+    "main main main main"
+    "main main main main"
+    "footer footer footer footer";
+}
 
-        .res1 {
-            grid-template-columns: 1fr 1fr 2fr 2fr 1fr 1fr;
-            grid-template-rows: 5rem 5rem 5rem 2rem;
-            grid-template-areas:
-                "logo header header header header header"
-                "menu menu main main sidebar sidebar"
-                "menu menu main main sidebar sidebar"
-                "footer footer footer footer footer footer";
-        }
+.res3 {
+  max-width: 360px;
+  grid-template-columns: 1fr 2fr 2fr;
+  grid-template-rows: 5rem 5rem 5rem 5rem 5rem 2rem;
+  grid-template-areas:
+    "logo header header"
+    "menu menu menu"
+    "main main main"
+    "main main main"
+    "sidebar sidebar sidebar"
+    "footer footer footer";
+}
 
-        .res2 {
-            grid-template-columns: 1fr 2fr 1fr 1fr;
-            grid-template-rows: 5rem 5rem 5rem 5rem 5rem 2rem;
-            grid-template-areas:
-                "logo header header header"
-                "menu menu sidebar sidebar"
-                "menu menu sidebar sidebar"
-                "main main main main"
-                "main main main main"
-                "footer footer footer footer";
-        }
+#grid-ji > .item {
+  min-width: 70%;
+  text-align: center;
+}
 
-        .res3 {
-            grid-template-columns: 1fr 2fr 2fr;
-            grid-template-rows: 5rem 5rem 5rem 5rem 5rem 2rem;
-            grid-template-areas:
-                "logo header header"
-                "menu menu menu"
-                "main main main"
-                "main main main"
-                "sidebar sidebar sidebar"
-                "footer footer footer";
-        }
+#grid-ai > .item {
+  min-height: 70%;
+  text-align: center;
+}
 
+#grid-jc {
+  grid-template-columns: auto auto 30% auto auto;
+  text-align: center;
+}
 
-        #grid-ji>.item {
-            min-width: 70%;
-            text-align: center;
-        }
+#grid-ac {
+  grid-template-rows: auto 30% auto;
+  height: 12rem;
+  text-align: center;
+}
 
-        #grid-ai>.item {
-            min-height: 70%;
-            text-align: center;
-        }
+#grid-ps {
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: 2rem 6rem 2rem;
+}
 
-        #grid-jc {
-            grid-template-columns: auto auto 30% auto auto;
-            text-align: center;
-        }
+#grid-ps :nth-child(5) {
+  place-self: stretch stretch;
+}
 
-        #grid-ac {
-            grid-template-rows: auto 30% auto;
-            height: 12rem;
-            text-align: center;
-        }
+.pic {
+  margin: 0.5rem 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
 
-        #grid-ps {
-            grid-template-columns: 1fr 3fr 1fr;
-            grid-template-rows: 2rem 6rem 2rem;
-        }
+.pic a {
+  text-decoration: none;
+}
 
-        #grid-ps :nth-child(5) {
-            place-self: stretch stretch;
-        }
+.pic img {
+  display: block;
+  margin: auto;
+  width: 90%;
+}
 
-        .pic {
-            margin: 0.5rem 0;
-            display: flex;
-            justify-content: start;
-        }
-
-
-        .pic a {
-            text-decoration: none;
-        }
-
-        .pic img {
-            display: block;
-            margin: auto;
-            width: 90%;
-        }
-
-
-        @media only screen and (max-width: 680px) {
-
-            .pic {
-                flex-direction: column;
-            }
-        }
+@media only screen and (max-width: 680px) {
+  .pic {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+}
     </style>
 </head>
 
@@ -529,11 +550,15 @@
             <button class="active" onclick="area(1)">grid-template-areas:<br>
                 "header header header header logo"<br>
                 "main main main sidebar sidebar"<br>
-                "footer footer . sidebar sidebar" ;</button>
+                "footer footer . sidebar sidebar" ;</button> <br>
             <button onclick="area(2)">grid-template-areas:<br>
                 "logo header header header sidebar"<br>
                 "main main main main sidebar"<br>
-                ". . footer . sidebar" ;</button>
+                ". . footer . sidebar" ;</button><br>
+                <button onclick="area(3)">grid-template-areas:<br>
+                    "logo header header header header"<br>
+                    "main main main sidebar sidebar"<br>
+                    "footer footer footer footer footer";</button>
             <div class="grid area1" id="grid-area">
                 <div style="grid-area: header; background-color: var(--item_color1);">header</div>
                 <div style="grid-area: main; background-color: var(--item_color2);">main</div>
@@ -542,7 +567,9 @@
                 <div style="grid-area: logo; background-color: rgba(255, 255, 0, 0.5);">logo</div>
             </div>
             <br>
-            <p>A aby sa tieto definície riadkov, stĺpcov a rozloženia blokov v mriežke nedefinovali po jednom, tak
+            <p class="text">Ak by som to chcel riešiť napríklad pre mobily, tak už by som musel prepísať aj rozloženie mriežky, 5x3 už nie je vhodné na malom display-i na výšku, a potom zadefinovať bloky. Príklady na toto sú tu ďalej v tutoriáli ukázané.</p>
+
+            <p class="text">A aby sa tieto definície riadkov, stĺpcov a rozloženia blokov v mriežke nedefinovali po jednom, tak
                 existuje aj kombinovaný zápis kde sa to dá napísať do jedného nastavenia. Ale to je na začiatok zbytočne
                 zložité a výsledok na stránke je rovnaký. </p>
             <script>
@@ -553,15 +580,18 @@
                         e.classList.remove("active");
                     });
                     buttons[p - 1].classList.add("active");
+                    element.classList.remove("area1", "area2", "area3");
                     switch (p) {
                         case 1:
-                            element.classList.remove("area2");
                             element.classList.add("area1");
                             break;
 
                         case 2:
-                            element.classList.remove("area1");
                             element.classList.add("area2");
+                            break;
+
+                            case 3:
+                            element.classList.add("area3");
                             break;
 
                     }
@@ -587,7 +617,8 @@
             <p class="text">Klikni na
                 jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
             <button class="active" onclick="gap(1)">gap: 5px;<br> (vodorovne aj zvislo rovnaké medzery)</button> <br>
-            <button onclick="gap(2)">column-gap: 2px; row-gap: 10px;<br> (rozdielne zvislé a vodorovné medzery)</button><br>
+            <button onclick="gap(2)">column-gap: 2px; row-gap: 10px;<br> (rozdielne zvislé a vodorovné
+                medzery)</button><br>
             <button onclick="gap(3)">column-gap: 1%; row-gap: 0.7rem;<br> (dajaké iné jednotky ako px)</button>
             <div class="grid" id="grid-gap">
                 <div class="item">1</div>
@@ -647,7 +678,8 @@
             </p>
             <p class="text">Klikni na
                 jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
-            <button class="active" onclick="ji(1)">justify-items: stretch;<br> (základ - roztiahnutý obsah)</button> <br>
+            <button class="active" onclick="ji(1)">justify-items: stretch;<br> (základ - roztiahnutý obsah)</button>
+            <br>
             <button onclick="ji(2)">justify-items: start;<br> (natlač obsah buniek na začiatok)</button><br>
             <button onclick="ji(3)">justify-items: end;<br> (natlač obsah buniek na koniec)</button><br>
             <button onclick="ji(4)">justify-items: center;<br> (natlač obsah na stred)</button><br>
@@ -776,7 +808,8 @@
             </p>
             <p class="text">Klikni na
                 jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
-            <button class="active" onclick="jc(1)">justify-content: stretch;<br> (základ - roztiahnutý obsah)</button> <br>
+            <button class="active" onclick="jc(1)">justify-content: stretch;<br> (základ - roztiahnutý obsah)</button>
+            <br>
             <button onclick="jc(2)">justify-content: start;<br> (natlač všetko na začiatok)</button><br>
             <button onclick="jc(3)">justify-content: end;<br> (natlač všetko na koniec)</button><br>
             <button onclick="jc(4)">justify-content: center;<br> (natlač všetko na stred)</button><br>
@@ -849,7 +882,8 @@
             </p>
             <p class="text">Klikni na
                 jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
-            <button class="active" onclick="ac(1)">align-content: stretch;<br> (základ - roztiahnutý obsah)</button> <br>
+            <button class="active" onclick="ac(1)">align-content: stretch;<br> (základ - roztiahnutý obsah)</button>
+            <br>
             <button onclick="ac(2)">align-content: start;<br> (natlač všetko na začiatok)</button><br>
             <button onclick="ac(3)">align-content: end;<br> (natlač všetko na koniec)</button><br>
             <button onclick="ac(4)">align-content: center;<br> (natlač všetko na stred)</button><br>
@@ -946,10 +980,13 @@
                 okraje v mriežke - táto 5x3 má vlastne v osi x 6 okrajov (1-6) a ak budem chcieť bunku po koniec tak
                 posledný bod bude 6! Bude to vidno v príkladoch...<br>
                 Nie je problém takto bunky do seba aj vnárať (aby sa "neposunuly" tak dostanú každá potrebné súradnice
-                aj "spodná", aj "vrchná"). Lepšie budú príklady (sú v záverečnej kapitole). Základ ukážky má súradnice napísané tak že začína v
+                aj "spodná", aj "vrchná"). Lepšie budú príklady (sú v záverečnej kapitole). Základ ukážky má súradnice
+                napísané tak že začína v
                 druhom stĺpci (2. okraj od kraja) a končí vo štvrtom stĺpci (5. okraj od kraja), je to jednoduchý zápis.
                 Ako riadok má len 2, to stačí ak neprechádza viacerými (zápis 2/3 je taktiež funkčný). Všimni si ako sa
-                presúvajú bunky okolo pri zmenách... Treba s tým rátať pri vytváraní mriežky stránky! A taktiež je tu vidno ako zostáva prázdne miesto ak je menej definovaných buniek ako celkovo vojde do mriežky (posledné dva príklady).
+                presúvajú bunky okolo pri zmenách... Riadne ich to rozhadzuje. Treba s tým rátať pri vytváraní mriežky stránky! A taktiež je tu
+                vidno ako zostáva prázdne miesto ak je menej definovaných buniek ako celkovo vojde do mriežky (posledné
+                dva príklady).
             </p>
             <p class="text">Klikni na
                 jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
@@ -1041,7 +1078,7 @@
                 <div class="item">2</div>
                 <div class="item">3</div>
                 <div class="item">4</div>
-                <div class="item2" id="place">XXX<br>XXXXX<br>XXX</div>
+                <div class="item2" id="place" style = "text-align: center;">XXX<br>XXXXX<br>XXX</div>
                 <div class="item">6</div>
                 <div class="item">7</div>
                 <div class="item">8</div>
@@ -1099,7 +1136,7 @@
         <section id="res">
             <h3> Dajaké ukážky možnej responzivity stránky </h3>
             <p class="text">
-                V tejto "praktickej časti" pridám hlavne ukážku možnej responzivity pomocou grid. Základ je navrhnúť si
+                V tejto "praktickej časti" zobrazujem hlavne ukážku možnej responzivity pomocou grid areas. Základ je navrhnúť si
                 vhodnú základnú mriežku... Kľudne radšej hustejšiu, bude viac možností manipulácie s blokmi, ničomu to
                 nevadí ak je viac riadkov alebo stĺpcov. V jednotlivých príkladoch vidno ako je to nakódované a ako to
                 potom vyzerá to rozloženie. Sú tu 3 varianty - akoby "monitor PC", "tablet" a "mobil". Vždy mám iba tie
@@ -1116,10 +1153,7 @@
                 vyzeralo,
                 ale v praxi asi treba "auto", alebo ak to vyhovuje viac tak pomery (fr) kto by sa triafal pravda do
                 výšky bloku... </p>
-            <p class="text"><strong>A tu je ešte odkaz na jednoduchú stránku s mini obsahom ktorá je komplet vytvorená
-                    pomocou grid a kde je tá responzivita plne funkčná:
-                    <a href="http://danielgago.sk/testy/grid_tutorial_respozivita.html" target="_blank">(klik)</a>.
-                </strong></p>
+            
             <p class="text">Klikni na jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
             <button class="active" onclick="res(1)"> <strong>PC</strong><br>
                 grid-template-columns: 1fr 1fr 2fr 2fr 1fr 1fr;<br>
@@ -1188,8 +1222,8 @@
         <div class="line"></div>
 
         <section>
-            <h3>Vytvoril som si dve skúšobné stránky...</h3>
-            <p class="text">Aby som to vyskúšal aspoň trochu v praxi tak som vytvoril 2 skúšobné stránky kde je niekoľko
+            <h3>A ešte praktickejšie ukážky - skúšobné stránky...</h3>
+            <p class="text">Aby som to vyskúšal aspoň trochu v praxi tak som vytvoril nejaké skúšobné stránky kde je niekoľko
                 vlastností použitých. Jedna stránka je čisto o
                 kódovaní - má len základné bloky, druhá dostala "pseudo obsah" aby bolo viditeľné praktické použitie.
                 Obe
@@ -1201,32 +1235,24 @@
                 som to čisto na pokusy s ladením buniek.</p>
             <p class="text">Obrázky náhľadov na stránky sú "klikacie", kód je v jednom súbore aby bol ľahšie k
                 dispozícii na skúmanie.</p>
-            <div class="pic"><a href="http://danielgago.sk/testy/grid_test_1.html" target="_blank"><img src="grid1.jpg"
+            <div class="pic">
+                <a href="http://danielgago.sk/testy/grid_test_1.html" target="_blank"><img src="grid1.jpg"
                         alt="grid1"></a>
                 <a href="http://danielgago.sk/testy/grid_test_fill.html" target="_blank"><img src="grid2.jpg"
                         alt="grid1"></a>
             </div>
+            <p class="text">A tu je ešte odkaz na jednoduchú stránku s mini obsahom ktorá je komplet vytvorená
+                    pomocou grid a kde je tá responzivita plne funkčná, a odkaz na jeden "efekt" pomocu gridu, taktiež plne responzívny, tam sa ten grid naozaj hodil...:
+                </p>
+                <div class="pic">
+                    <a href="http://danielgago.sk/testy/grid_tutorial_respozivita.html" target="_blank"><img src="grid_test3.png" alt="grid3"></a>
+                    <a href="http://danielgago.sk/len%20tak/grid_test_text_pictures1.html" target="_blank"><img src="grid_test4.png" alt="grid4"></a>
+                </div>
         </section>
 
         &copy; Daniel Gago (2021)
 
     </div>
-
-
-    <!--
-        <section>
-        <h3></h3>
-        <p class="text">
-
-        </p>
-        <p class="text">Klikni na jednotlivé príkazy aby bolo vidno ako sa mení zobrazenie:</p>
-        <button class="active" onclick="displayBlock()">display: block; (základné zobrazenie)</button>
-        <button onclick="displayFlex()">display: flex; (flexibilné zobrazenie)</button>
-    </section>
-
-    <div class="line"></div>
-
--->
 
 </body>
 
