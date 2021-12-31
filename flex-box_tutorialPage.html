@@ -15,8 +15,10 @@
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+                    box-sizing: border-box;
         }
+
 
         body {
             font-size: 1.063rem;
@@ -24,7 +26,7 @@
 
         .width {
             /*  šírka celého projektu*/
-            max-width: 1050px;
+            max-width: 950px;
             margin: 0 auto;
             padding: 3% 3%;
             font-family: Arial, Helvetica, sans-serif;
@@ -47,6 +49,7 @@
 
         h3 {
             padding-bottom: 1rem;
+            max-width: 66ch;
         }
 
         .line {
@@ -93,26 +96,36 @@
 
 
         .fb_container {
+            -webkit-transition: all 0.5s;
+            -o-transition: all 0.5s;
+            transition: all 0.5s;
             /* obaľovací flex kontajner pre bloky */
             background-color: #08946b;
             padding: 1%;
             position: relative;
             border: 3px solid #272727;
             margin-top: 0.55rem;
+            max-width: 70ch;
         }
 
         .flex {
             /* priadaj mu vlastnosť display: flex; */
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
         }
 
         .wrap {
             /* pridaj mu vlastnosť flex-wrap:wrap; */
             height: 400px;
-            flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
         }
 
         .fb_item {
+            -webkit-transition: all 0.5s;
+            -o-transition: all 0.5s;
+            transition: all 0.5s;
             /* základný oranžový blok na ukážky */
             width: 15%;
             background-color: #ff652f;
@@ -131,17 +144,17 @@
 
         .item1 {
             /* 1.blok - len definícia výšky aby sa dali demonštrovať daktoré funkcie */
-            min-height: 65px;
+            min-height: 3rem;
         }
 
         .item2 {
             /* 2. blok*/
-            min-height: 100px;
+            min-height: 5rem;
         }
 
         .item3 {
             /* 3. blok */
-            min-height: 200px;
+            min-height: 10rem;
         }
 
         .lineX {
@@ -310,6 +323,7 @@
                     buttons[p].classList.add("active");
                     switch (p) {
                         case (0):
+                            /* príkaz setAttribute nie je vhodný na štýlovanie, ale v tomto prípade to nevadí, lebo mením iba jednu vlastnosť */
                             element.setAttribute("style", "flex-direction: row;");
                             break;
                         case (1):
@@ -353,8 +367,9 @@
                 ďalšia kapitola). Blok s 80 % dostal ešte príkaz margin-left a margin-right "auto", aby sa
                 nacentroval.<br>
                 Pre lepšiu názornosť správania sa blokov po tomto príkaze majú tie hore aj rozdielnu šírku, a tie dolu
-                rovnakú (23%). <br>
-                <strong>POZOR - toto je časť stránky ktorá na daktorých mobiloch s extra nízkym rozlíšením (na výšku)
+                rovnakú. <br>
+                <strong>POZOR - toto je časť stránky ktorá na daktorých mobiloch s extra nízkym rozlíšením (pod 360px a
+                    zobrazenie na výšku)
                     nebude možno zobrazená korektne. Ale na bežných funguje už korektne.
                 </strong><br>
                 <br>
@@ -732,19 +747,19 @@
                     buttons[p].classList.add("active");
                     switch (p) {
                         case (0):
-                            element1.setAttribute("style", "width: 33.3%; align-self: stretch;");
-                            element2.setAttribute("style", "width: 33.3%; align-self: stretch;");
-                            element3.setAttribute("style", "width: 33.3%; align-self: stretch;");
+                            element1.style.alignSelf = "stretch";
+                            element2.style.alignSelf = "stretch";
+                            element3.style.alignSelf = "stretch";
                             break;
                         case (1):
-                            element1.setAttribute("style", "width: 33.3%; align-self: center;");
-                            element2.setAttribute("style", "width: 33.3%; align-self: flex-end;");
-                            element3.setAttribute("style", "width: 33.3%; align-self: stretch;");
+                            element1.style.alignSelf = "center";
+                            element2.style.alignSelf = "flex-end";
+                            element3.style.alignSelf = "stretch";
                             break;
                         case (2):
-                            element1.setAttribute("style", "width: 33.3%; align-self: stretch;");
-                            element2.setAttribute("style", "width: 33.3%; align-self: flex-start;");
-                            element3.setAttribute("style", "width: 33.3%; align-self: stretch;");
+                            element1.style.alignSelf = "stretch";
+                            element2.style.alignSelf = "flex-start";
+                            element3.style.alignSelf = "stretch";
                             break;
                     }
                 }
@@ -769,11 +784,10 @@
             <button onclick="order(2)">3 - malý display (mobil - všetko na celú šírku a pod sebou, ideálne aj text na
                 strede)</button> <br>
             <div id="order" class="fb_container flex" style="flex-wrap: wrap;">
-                <div id="order1" class="fb_item item1 font" style="width: 18%;">Menu</div>
+                <div id="order1" class="fb_item item2 font" style="width: 18%;">Menu</div>
                 <div id="order2" class="fb_item item3 font" style="width: 58%;">Main</div>
-                <div id="order3" class="fb_item item1 font" style="width: 18%;">Aside</div>
+                <div id="order3" class="fb_item item2 font" style="width: 18%;">Aside</div>
             </div>
-            <div class="line"></div>
 
             <script>
                 function order(p) {
@@ -784,37 +798,85 @@
                     buttons[p].classList.add("active");
                     switch (p) {
                         case (0):
-                            var element = document.getElementById("order1");
-                            element.setAttribute("style", "width: 18%; order:1;");
-                            var element = document.getElementById("order2");
-                            element.setAttribute("style", "width: 58%; order:2;");
-                            var element = document.getElementById("order3");
-                            element.setAttribute("style", "width: 18%; order:3;");
-                            var element = document.getElementById("order");
-                            element.setAttribute("style", "max-width: 100%; flex-wrap: wrap;");
+                            document.getElementById("order1").setAttribute("style", "width: 18%; order:1;");
+                            document.getElementById("order2").setAttribute("style", "width: 58%; order:2;");
+                            document.getElementById("order3").setAttribute("style", "width: 18%; order:3;");
+                            document.getElementById("order").setAttribute("style", "max-width: 70ch; flex-wrap: wrap;");
                             break;
                         case (1):
-                            var element = document.getElementById("order1");
-                            element.setAttribute("style", "width: 38%; order:1;");
-                            var element = document.getElementById("order2");
-                            element.setAttribute("style", "width: 98%; order:3; align-self: flex-end;");
-                            var element = document.getElementById("order3");
-                            element.setAttribute("style", "width: 58%; order:2;");
-                            var element = document.getElementById("order");
-                            element.setAttribute("style", "max-width: 768px; flex-wrap: wrap;");
+                            document.getElementById("order1").setAttribute("style", "width: 38%; order:1;");
+                            document.getElementById("order2").setAttribute("style", "width: 98%; order:3;");
+                            document.getElementById("order3").setAttribute("style", "width: 58%; order:2;");
+                            document.getElementById("order").setAttribute("style", "max-width: 600px; flex-wrap: wrap;");
                             break;
                         case (2):
-                            var element = document.getElementById("order1");
-                            element.setAttribute("style", "width:98%; order:1; text-align: center;");
-                            var element = document.getElementById("order2");
-                            element.setAttribute("style", "width: 98%; order:2; text-align: center;");
-                            var element = document.getElementById("order3");
-                            element.setAttribute("style", "width: 98%; order:3; text-align: center;");
-                            var element = document.getElementById("order");
-                            element.setAttribute("style", "max-width: 480px; flex-wrap: wrap;");
+                            document.getElementById("order1").setAttribute("style", "width:98%; order:1; text-align: center;");
+                            document.getElementById("order2").setAttribute("style", "width: 98%; order:2; text-align: center;");
+                            document.getElementById("order3").setAttribute("style", "width: 98%; order:3; text-align: center;");
+                            document.getElementById("order").setAttribute("style", "max-width: 480px; flex-wrap: wrap;");
                             break;
                     }
                 }
+            </script>
+        </section>
+        <br>
+        <section id="megaresp">
+            <p class="text">A ešte ukážka responzivity pri zložitejšej stránke, aby bolo vidieť možnosti flexu "naplno". Aj keď - na
+                toto sa hodí už viac grid... Ale aj flex to zvládne ak nie je treba dajako extra ladiť stránku čo sa
+                týka "riadkov" - teda výšok elementov. Aj tu sa mení aj poradie blokov (pomocou order).<br>
+                (pre výsledok klikni na požadovaný príkaz a rozloženie sa zmení) <br>
+            </p>
+            <button class="active" onclick="resp(0)">1 - klasický monitor</button> <br>
+            <button onclick="resp(1)">2 - stredne veľké zariadenie (tablet)</button> <br>
+            <button onclick="resp(2)">3 - malý display (mobil)</button> <br>
+            <div id="resp" class="fb_container flex" style="flex-wrap: wrap;">
+                <div id="resp_logo" class="fb_item item2 font" style="width: 18%; text-align: center;">Logo</div>
+                <div id="resp_header" class="fb_item item2 font" style="width: 78%; text-align:center;">Header</div>
+                <div id="resp_menu" class="fb_item item3 font" style="width: 23%;">Menu</div>
+                <div id="resp_main" class="fb_item item3 font" style="width: 43%;">Main</div>
+                <div id="resp_aside" class="fb_item item3 font" style="width: 28%;">Aside</div>
+                <div id="resp_footer" class="fb_item item1 font" style="width: 98%; text-align: center;">Footer</div>
+            </div>
+            <div class="line"></div>
+
+            <script>
+                function resp(p) {
+                    var buttons = document.querySelectorAll("#megaresp>button");
+                    buttons.forEach(element => {
+                        element.classList.remove("active");
+                    });
+                    buttons[p].classList.add("active");
+                    switch (p) {
+                        case (0):
+                            document.getElementById("resp_logo").setAttribute("style", "width: 18%; order: 1; text-align: center;");
+                            document.getElementById("resp_header").setAttribute("style", "width: 78%; order: 2; text-align: center;");
+                            document.getElementById("resp_menu").setAttribute("style", "width: 23%; order: 3;");
+                            document.getElementById("resp_main").setAttribute("style", "width: 43%; order: 4;");
+                            document.getElementById("resp_aside").setAttribute("style", "width: 28%; order: 5;");
+                            document.getElementById("resp_footer").setAttribute("style", "width: 98%; order: 6; text-align: center;");
+                            document.getElementById("resp").setAttribute("style", "max-width: 70ch; flex-wrap: wrap;");
+                            break;
+                        case (1):
+                            document.getElementById("resp_logo").setAttribute("style", "width: 18%; order: 1; text-align: center;");
+                            document.getElementById("resp_header").setAttribute("style", "width: 78%; order: 2; text-align: center;");
+                            document.getElementById("resp_menu").setAttribute("style", "width: 38%; order: 3;");
+                            document.getElementById("resp_main").setAttribute("style", "width: 98%; order: 5;");
+                            document.getElementById("resp_aside").setAttribute("style", "width: 58%; order: 4;");
+                            document.getElementById("resp_footer").setAttribute("style", "width: 98%; order: 6; text-align: center;");
+                            document.getElementById("resp").setAttribute("style", "max-width: 600px; flex-wrap: wrap;");
+                            break;
+                        case (2):
+                            document.getElementById("resp_logo").setAttribute("style", "width: 18%; order: 1; text-align: center;");
+                            document.getElementById("resp_header").setAttribute("style", "width: 78%; order: 2; text-align: center;");
+                            document.getElementById("resp_menu").setAttribute("style", "width: 98%; order: 3;");
+                            document.getElementById("resp_main").setAttribute("style", "width: 98%; order: 4;");
+                            document.getElementById("resp_aside").setAttribute("style", "width: 98%; order: 5;");
+                            document.getElementById("resp_footer").setAttribute("style", "width: 98%; order: 6; text-align: center;");
+                            document.getElementById("resp").setAttribute("style", "max-width: 480px; flex-wrap: wrap;");
+                            break;
+                    }
+                }
+            </script>
             </script>
 
         </section>
@@ -858,7 +920,7 @@
                 flex-direction: column; align-items: flex-end; (obsah na koniec - vpravo)
                 a justify-content: space-between; (roztiahni ho na výšku čo najviac od seba)
             </p>
-            <div class="fb_container flex wrap">
+            <div class="fb_container flex wrap" style = "height: auto;">
                 <div class="fb_item item1 font"
                     style="width: 48%; height: 150px; display: flex; justify-content: center; align-items: flex-start;">
                     <div class="number">1</div>
@@ -908,12 +970,38 @@
             <div class="line"></div>
 
         </section>
+        <section>
+            <h3>Medzery medzi blokmi - gap / margin</h3>
+            <p class="text">Len tak pre zaujímavosť - na ladenie medzier medzi blokmi ide použiť aj príkaz "gap", známy skôr z "grid"-u. Tu funguje taktiež a netreba nastavovať marginy medzi elementami vo vnútri flex kontajnera. A ako to presne funguje vidno tu na príklade (presne takto sa to ale správa aj pri tom spomenutom grid-e). Všetky vnútorné elementy majú zrušené marginy, vonkajší obal má zrušené paddingy, a výsledok je takýto - po okrajoch je obsah v obale nalepený na obal, ale medzi sebou majú tie vnútorné bloky medzery - tu konkrétne 10px som nastavil pomocou "column-gap: 10px;" pre medzery medzi blokmi vedľa seba, a 20px pomocou "row-gap: 20px;" pre medzery medzi riadkami blokov (parametre sú zadané v obaľovacom elemente!). Medzeru medzi obalom a vnútornými elementami by som urobil pomocou padding-u pre obal (tak ako to mám všade inde v tomto kóde). Ide použiť aj čisto príkaz "gap: hodnota;", potom to platí pre medzery vodorovne aj zvislo. Ale mám pocit že pomocou marginov to je lepšie nastavovať... Možno sa občas hodí jedno, občas druhé, záleží asi na okolnostiach.</p>
+            <p class="text">
+                (POZOR na nastavené šírky elementov, ten gap sa k nim musí pripočítať, aby ešte vošli do obalu správne! V mojom kóde je to vidno ako som to doladil pomocou calc funkcie... Keďže mám nastavené pre obal "flex-wrap: wrap;", tak musím dávať pozor na šírky tých vnútorných elementov, lebo mi elementy hodí pod seba ak sa nevojdú.)
+            </p>
+            <div class="fb_container flex wrap" style="padding: 0; height: auto; column-gap: 10px; row-gap: 20px;">
+                <div class="fb_item item1"
+                    style="width: calc(50% - 5px); height: 150px; padding: 0; margin: 0;">
+                </div>
+                <div class="fb_item item2"
+                    style="width: calc(50% - 5px); height: 150px; padding: 0; margin: 0;">
+                </div>
+                <div class="fb_item"
+                    style="width: calc(33.33% - 5px); height: 150px; padding: 0; margin: 0;">
+                </div>
+                <div class="fb_item"
+                    style="width: calc(33.33% - 10px); height: 150px; padding: 0; margin: 0;">
+                    </div>
+                <div class="fb_item"
+                    style="width: calc(33.33% - 5px); height: 150px; padding: 0; margin: 0;">
+                </div>
+        
+            </div>
+            <div class="line"></div>
+        
+        </section>
 
-        <strong>No a či a hlavne ako to funguje v praxi som skúsil napríklad tu:
+        <p class="text" style="padding-bottom: 0;"><strong>No a či a hlavne ako to funguje v praxi som skúsil napríklad tu:
             <a href="http://danielgago.sk/FlexBox_test.html" target="_blank">FlexBoxTest</a> </strong> <br>
-        Stránka je plne responzívna (mení sa aj poradie blokov), pohrajte sa s jej šírkou. Sú tam aj ukážky centrovania
-        obsahu v blokoch.
-        <br>
+        Stránka je plne responzívna (mení sa aj poradie blokov), pohrajte sa s jej šírkou. Sú tam aj ukážky (výškového!) centrovania
+        obsahu v blokoch (To funguje iba na PC, keď je obsah blokov vedľa seba! To je to obmedzenie flex-u oproti gridu...).</p>
         <div class="line"></div>
         &copy; Daniel Gago (2021)
 
